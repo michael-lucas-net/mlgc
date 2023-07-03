@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { Select } = require("enquirer");
 const copy = require("./src/copy.js");
 const settings = require("./data/settings.js");
