@@ -1,0 +1,10 @@
+{
+  "name": "git-changed-npm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Michael Lucas <michael-lucas-net@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "enquirer": "^2.3.6"
+  }
+}
