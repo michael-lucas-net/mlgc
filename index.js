@@ -7,8 +7,6 @@ const files = require("./src/fileHelper.js");
 const generatePath = require("./src/args.js");
 const path = generatePath(process.argv);
 
-console.log("You are currently in " + path);
-
 const prompt = new Select({
   name: "menu",
   message: "What do you want to do?",
