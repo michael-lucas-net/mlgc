@@ -2,11 +2,12 @@
 
 const fs = require("fs").promises;
 
-const createFolder = (path) => {
-  // Create folder, async
-  fs.mkdir(path, { recursive: true }, (err) => {
-    if (err) throw err;
-  });
+const createFolder = async (path) => {
+  try {
+    await fs.mkdir(path, { recursive: true });
+  } catch (err) {
+    throw err;
+  }
 };
 
 const folderExists = async (path) => {
@@ -21,7 +22,7 @@ const folderExists = async (path) => {
 const copyFile = async (source, destination) => {
   const destinationFolder = destination.split("/").slice(0, -1).join("/");
   if (!(await folderExists(destinationFolder))) {
-    createFolder(destinationFolder);
+    await createFolder(destinationFolder);
   }
 
   // if destination is a folder, skip
@@ -35,6 +36,8 @@ const copyFile = async (source, destination) => {
   } catch (err) {
     throw err;
   }
+
+  return true;
 };
 
 const removeFolder = async (path) => {
@@ -45,7 +48,7 @@ const removeFolder = async (path) => {
 
   // Remove folder
   try {
-    await fs.rmdir(path, { recursive: true });
+    await fs.rm(path, { recursive: true });
   } catch (err) {
     throw err;
   }

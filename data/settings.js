@@ -18,6 +18,8 @@ const settings = {
     "LICENSE",
     "package.json",
     "package-lock.json",
+    "composer.lock",
+    "composer.json",
   ],
 };
 

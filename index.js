@@ -21,7 +21,6 @@ prompt
     switch (answer) {
       case "Copy current changes to directory for upload":
         console.log("Alrighty, copying current changes to upload-directory...");
-        console.log("");
         copy("commit", path);
         break;
       case "Copy changes from main branch to directory for upload":
@@ -29,7 +28,6 @@ prompt
           "Alrighty, copying changes from main branch to upload-directory..."
         );
         copy("branch", path);
-        console.log("Done!");
         break;
       case "Delete all files in upload-directory":
         clearFolder(path + "/" + settings["upload-folder-name"]);

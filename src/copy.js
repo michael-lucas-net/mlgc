@@ -49,7 +49,7 @@ const copy = async (branchOrCommit, path) => {
 
   const command = gitCommand(branchOrCommit);
 
-  exec(command, (error, stdout, stderr) => {
+  exec(command, async (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`);
       return;
@@ -68,10 +68,13 @@ const copy = async (branchOrCommit, path) => {
     console.log("Found " + fileHelper.amountOfFiles(files) + " file(s):");
 
     // copy files to upload-directory
-    files.forEach((file) => {
+    files.forEach(async (file) => {
       if (file != "") {
         console.log("Copying " + file + "...");
-        fileHelper.copyFile(file, settings["upload-folder-name"] + "/" + file);
+        await fileHelper.copyFile(
+          file,
+          settings["upload-folder-name"] + "/" + file
+        );
       }
     });
   });
