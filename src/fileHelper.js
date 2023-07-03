@@ -46,4 +46,15 @@ const removeFolder = (path) => {
   });
 };
 
-module.exports = { copyFile, removeFolder };
+const amountOfFiles = (files) => {
+  let amountOfFiles = 0;
+  files.forEach((file) => {
+    if (file != "") {
+      amountOfFiles++;
+    }
+  });
+
+  return amountOfFiles;
+};
+
+module.exports = { copyFile, removeFolder, amountOfFiles };

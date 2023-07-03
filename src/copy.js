@@ -30,10 +30,12 @@ const gitCommand = (branchOrCommit) => {
   return start;
 };
 
-const copy = (branchOrCommit) => {
-  console.log(gitCommand(branchOrCommit));
-
+const copy = (branchOrCommit, path) => {
   const { exec } = require("child_process");
+
+  // move to path
+  process.chdir(path);
+
   const command = gitCommand(branchOrCommit);
 
   exec(command, (error, stdout, stderr) => {
@@ -50,7 +52,8 @@ const copy = (branchOrCommit) => {
     // stdout should be a list of files
     const files = stdout.split("\n");
 
-    console.log("Found " + files.length + " files.");
+    // log amount of files (not folders)
+    console.log("Found " + fileHelper.amountOfFiles(files) + " file(s).");
     console.log("");
 
     // copy files to upload-directory

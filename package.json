@@ -1,9 +1,16 @@
 {
-  "name": "git-changed-npm",
-  "version": "1.0.0",
+  "name": "mlgc",
+  "version": "1.0.2",
   "main": "index.js",
   "author": "Michael Lucas <michael-lucas-net@users.noreply.github.com>",
   "license": "MIT",
+  "bin": {
+    "mlgc": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
   "dependencies": {
     "enquirer": "^2.3.6"
   }

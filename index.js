@@ -4,6 +4,10 @@ const { Select } = require("enquirer");
 const copy = require("./src/copy.js");
 const settings = require("./data/settings.js");
 const files = require("./src/fileHelper.js");
+const generatePath = require("./src/args.js");
+const path = generatePath(process.argv);
+
+console.log("You are currently in " + path);
 
 const prompt = new Select({
   name: "menu",
@@ -22,17 +26,17 @@ prompt
       case "Copy current changes to directory for upload":
         console.log("Alrighty, copying current changes to upload-directory...");
         console.log("");
-        copy("commit");
+        copy("commit", path);
         break;
       case "Copy changes from main branch to directory for upload":
         console.log(
           "Alrighty, copying changes from main branch to upload-directory..."
         );
-        copy("branch");
+        copy("branch", path);
         console.log("Done!");
         break;
       case "Delete all files in upload-directory":
-        files.removeFolder(settings["upload-folder-name"]);
+        files.removeFolder(path + "/" + settings["upload-folder-name"]);
         console.log("Done!");
         break;
     }
