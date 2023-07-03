@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 const { Select } = require("enquirer");
-const copy = require("./src/copy.js");
+const { copy, clearFolder } = require("./src/copy.js");
 const settings = require("./data/settings.js");
-const files = require("./src/fileHelper.js");
 const generatePath = require("./src/args.js");
 const path = generatePath(process.argv);
 
@@ -33,8 +32,7 @@ prompt
         console.log("Done!");
         break;
       case "Delete all files in upload-directory":
-        files.removeFolder(path + "/" + settings["upload-folder-name"]);
-        console.log("Done!");
+        clearFolder(path + "/" + settings["upload-folder-name"]);
         break;
     }
   })

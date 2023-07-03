@@ -30,7 +30,18 @@ const gitCommand = (branchOrCommit) => {
   return start;
 };
 
-const copy = (branchOrCommit, path) => {
+async function clearFolder(path) {
+  try {
+    await fileHelper.removeFolder(path);
+  } catch (err) {
+    console.error("An error occurred:", err);
+    return false;
+  }
+  return true;
+}
+
+const copy = async (branchOrCommit, path) => {
+  await clearFolder(path + "/" + settings["upload-folder-name"]);
   const { exec } = require("child_process");
 
   // move to path
@@ -53,17 +64,17 @@ const copy = (branchOrCommit, path) => {
     const files = stdout.split("\n");
 
     // log amount of files (not folders)
-    console.log("Found " + fileHelper.amountOfFiles(files) + " file(s).");
     console.log("");
+    console.log("Found " + fileHelper.amountOfFiles(files) + " file(s):");
 
     // copy files to upload-directory
     files.forEach((file) => {
       if (file != "") {
-        console.log("Copying " + file);
+        console.log("Copying " + file + "...");
         fileHelper.copyFile(file, settings["upload-folder-name"] + "/" + file);
       }
     });
   });
 };
 
-module.exports = copy;
+module.exports = { copy, clearFolder };

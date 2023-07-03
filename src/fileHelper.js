@@ -1,6 +1,6 @@
 // Author: Michael Lucas
 
-const fs = require("fs");
+const fs = require("fs").promises;
 
 const createFolder = (path) => {
   // Create folder, async
@@ -9,41 +9,46 @@ const createFolder = (path) => {
   });
 };
 
-const folderExists = (path) => {
+const folderExists = async (path) => {
   try {
-    const stats = fs.statSync(path);
-    return stats.isDirectory();
-  } catch (error) {
-    if (error.code === "ENOENT") {
-      return false;
-    } else {
-      throw error;
-    }
+    await fs.access(path);
+    return true;
+  } catch {
+    return false;
   }
 };
 
-const copyFile = (source, destination) => {
+const copyFile = async (source, destination) => {
   const destinationFolder = destination.split("/").slice(0, -1).join("/");
-  if (!folderExists(destinationFolder)) {
+  if (!(await folderExists(destinationFolder))) {
     createFolder(destinationFolder);
   }
 
   // if destination is a folder, skip
-  if (folderExists(destination)) {
+  if (await folderExists(destination)) {
     return;
   }
 
   // Copy file
-  fs.copyFile(source, destination, (err) => {
-    if (err) throw err;
-  });
+  try {
+    await fs.copyFile(source, destination);
+  } catch (err) {
+    throw err;
+  }
 };
 
-const removeFolder = (path) => {
+const removeFolder = async (path) => {
+  // if folder doesn't exist, skip
+  if (!(await folderExists(path))) {
+    return;
+  }
+
   // Remove folder
-  fs.rmdir(path, { recursive: true }, (err) => {
-    if (err) throw err;
-  });
+  try {
+    await fs.rmdir(path, { recursive: true });
+  } catch (err) {
+    throw err;
+  }
 };
 
 const amountOfFiles = (files) => {
