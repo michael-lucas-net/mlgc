@@ -51,7 +51,7 @@ const copy = async (branchOrCommit, path) => {
 
   exec(command, async (error, stdout, stderr) => {
     if (error) {
-      console.log(`error: ${error.message}`);
+      console.log(`Seems like there are no changed files :)`);
       return;
     }
 
