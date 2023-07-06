@@ -9,17 +9,25 @@
     "url": "https://github.com/michael-lucas-net/git-changed-npm.git"
   },
   "keywords": [
-    "git", "changes", "upload", "helper", "cli"
+    "git",
+    "changes",
+    "upload",
+    "helper",
+    "cli"
   ],
   "license": "MIT",
   "bin": {
     "mlgc": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node index.js"
   },
   "dependencies": {
     "enquirer": "^2.3.6"
+  },
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "mock-require": "^3.0.3"
   }
 }

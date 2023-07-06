@@ -1,18 +1,17 @@
-const getPathWhereUserCurrentlyIs = require("./path.js");
+const path = require("path");
 
-function generatePath(args) {
-  let path = getPathWhereUserCurrentlyIs();
-  // get parameters
-  if (process.argv.length > 2) {
-    // Das erste Argument befindet sich an Index 2
+function generatePath(args, basePath = process.cwd()) {
+  let finalPath = basePath;
+
+  if (process.argv && process.argv.length > 2) {
     const arg = process.argv[2];
 
-    if (arg != "") {
-      path += "/" + arg;
+    if (arg && arg[0] !== "/") {
+      finalPath = path.join(basePath, arg);
     }
   }
 
-  return path;
+  return finalPath;
 }
 
 module.exports = generatePath;
