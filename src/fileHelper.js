@@ -2,7 +2,23 @@
 
 const fs = require("fs").promises;
 
+const validatePath = (path) => {
+  if (path === undefined) {
+    throw new Error("Path is undefined");
+  }
+
+  if (path === null) {
+    throw new Error("Path is null");
+  }
+
+  if (path === "") {
+    throw new Error("Path is an empty string");
+  }
+};
+
 const createFolder = async (path) => {
+  validatePath(path);
+
   try {
     await fs.mkdir(path, { recursive: true });
   } catch (err) {
@@ -12,10 +28,27 @@ const createFolder = async (path) => {
 
 const folderExists = async (path) => {
   try {
+    validatePath(path);
     await fs.access(path);
     return true;
   } catch {
     return false;
+  }
+};
+
+const removeFolder = async (path) => {
+  validatePath(path);
+
+  // if folder doesn't exist, skip
+  if (!(await folderExists(path))) {
+    return;
+  }
+
+  // Remove folder
+  try {
+    await fs.rm(path, { recursive: true });
+  } catch (err) {
+    throw err;
   }
 };
 
@@ -40,20 +73,6 @@ const copyFile = async (source, destination) => {
   return true;
 };
 
-const removeFolder = async (path) => {
-  // if folder doesn't exist, skip
-  if (!(await folderExists(path))) {
-    return;
-  }
-
-  // Remove folder
-  try {
-    await fs.rm(path, { recursive: true });
-  } catch (err) {
-    throw err;
-  }
-};
-
 const amountOfFiles = (files) => {
   let amountOfFiles = 0;
   files.forEach((file) => {
@@ -65,4 +84,10 @@ const amountOfFiles = (files) => {
   return amountOfFiles;
 };
 
-module.exports = { copyFile, removeFolder, amountOfFiles };
+module.exports = {
+  copyFile,
+  removeFolder,
+  amountOfFiles,
+  createFolder,
+  folderExists,
+};
