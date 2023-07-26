@@ -3,6 +3,13 @@
 const settings = require("../data/settings.js");
 const fileHelper = require("./fileHelper.js");
 
+/**
+ * Generates a command-line string for excluding files from a search using grep.
+ * This function takes the list of ignored files from the 'settings' object and constructs
+ * a command-line string to exclude those files using 'grep -v' (invert-match) option.
+ *
+ * @returns {string} A command-line string with grep patterns for excluding files.
+ */
 const getIgnoredFiles = () => {
   let ignoredFiles = " ";
   const grep = "| grep -v '^";
@@ -16,6 +23,13 @@ const getIgnoredFiles = () => {
   return ignoredFiles;
 };
 
+/**
+ * Generates a Git command based on the input branchOrCommit.
+ *
+ * @param {string} branchOrCommit - Specifies whether the Git command should be generated for a branch or a commit.
+ *                                  Possible values: "branch" or "commit".
+ * @returns {string} The generated Git command.
+ */
 const gitCommand = (branchOrCommit) => {
   const branchName = settings["main-branch"];
 
@@ -30,6 +44,13 @@ const gitCommand = (branchOrCommit) => {
   return start;
 };
 
+/**
+ * Asynchronously clears a folder and all its contents.
+ *
+ * @param {string} path - The path of the folder to be cleared.
+ * @returns {boolean} Returns true if the folder was cleared successfully, otherwise returns false.
+ * @throws {Error} Throws an error if there was a problem removing the folder and its contents.
+ */
 async function clearFolder(path) {
   try {
     await fileHelper.removeFolder(path);
@@ -40,6 +61,20 @@ async function clearFolder(path) {
   return true;
 }
 
+/**
+Copies files from a specified branch or commit to a target path.
+@param {string} branchOrCommit - Specifies whether the Git command should be generated for a branch or a commit.
+                                 Possible values: "branch" or "commit".
+@param {string} path - The target path where the files will be copied to.
+@async
+@function
+@throws {Error} If an error occurs during the copying process.
+@description
+This function moves to the specified path and executes a Git command to retrieve the list of files
+from the given branch or commit. It then copies the files to the target "upload-folder-name" within the target path.
+If there are no changed files, it logs a message indicating this. If there are errors during the execution,
+appropriate error messages are displayed.
+*/
 const copy = async (branchOrCommit, path) => {
   await clearFolder(path + "/" + settings["upload-folder-name"]);
   const { exec } = require("child_process");
