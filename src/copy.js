@@ -33,7 +33,7 @@ const getIgnoredFiles = () => {
 const gitCommand = (branchOrCommit) => {
   const branchName = settings["main-branch"];
 
-  let start = "git add -N . && git diff --name-only ";
+  let start = "git add -N . && git diff --name-only --diff-filter=d ";
 
   if (branchOrCommit == "branch") {
     start += "origin/" + branchName + getIgnoredFiles();
