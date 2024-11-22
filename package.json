@@ -1,7 +1,7 @@
 {
   "name": "mlgc",
-  "version": "1.2.0",
-  "main": "index.js",
+  "version": "1.2.1",
+  "main": "./src/cli/index.js",
   "author": "Michael Lucas <info@michael-lucas.net> (http://www.michael-lucas.net)",
   "homepage": "https://github.com/michael-lucas-net/mlgc",
   "repository": {
@@ -17,7 +17,7 @@
   ],
   "license": "MIT",
   "bin": {
-    "mlgc": "./index.js"
+    "mlgc": "./src/cli/index.js"
   },
   "scripts": {
     "test": "jest",
