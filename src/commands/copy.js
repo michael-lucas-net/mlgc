@@ -20,7 +20,7 @@ async function copy(branchOrCommit, path) {
     const files = stdout.split("\n").filter((file) => file !== "");
 
     if (files.length === 0) {
-      log.warn("No changes found.");
+      log.info("No changes found.");
       return;
     }
 
