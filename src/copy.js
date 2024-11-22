@@ -2,6 +2,8 @@
 
 const settings = require("../data/settings.js");
 const fileHelper = require("./fileHelper.js");
+const { log } = require("./commands/output.js");
+const boxen = require("boxen");
 
 /**
  * Generates a command-line string for excluding files from a search using grep.
@@ -55,9 +57,10 @@ async function clearFolder(path) {
   try {
     await fileHelper.removeFolder(path);
   } catch (err) {
-    console.error("An error occurred:", err);
+    log.error("An error occurred:", err);
     return false;
   }
+  log.success("Finished deleting the folder and files");
   return true;
 }
 
@@ -86,32 +89,43 @@ const copy = async (branchOrCommit, path) => {
 
   exec(command, async (error, stdout, stderr) => {
     if (error) {
-      console.log(`Seems like there are no changed files :)`);
+      log.warn(`Seems like there are no changed files :)`);
       return;
     }
 
     if (stderr) {
-      console.log(`stderr: ${stderr}`);
+      log.error(`stderr: ${stderr}`);
       return;
     }
 
     // stdout should be a list of files
     const files = stdout.split("\n");
 
-    // log amount of files (not folders)
-    console.log("");
-    console.log("Found " + fileHelper.amountOfFiles(files) + " file(s):");
+    let amount = 0;
+    let fileList = "";
 
-    // copy files to upload-directory
-    files.forEach(async (file) => {
-      if (file != "") {
-        console.log("Copying " + file + "...");
+    for (const file of files) {
+      if (file !== "") {
+        fileList += `- ${file}\n`;
         await fileHelper.copyFile(
           file,
           settings["upload-folder-name"] + "/" + file
         );
+        amount++;
       }
+    }
+
+    // Erstelle eine Box mit der Liste aller Dateien
+    const boxMessage = boxen(`I copied these ${amount} files:\n\n${fileList}`, {
+      padding: 1,
+      margin: 1,
+      borderStyle: "round",
+      borderColor: "cyan",
     });
+
+    console.log(boxMessage);
+
+    log.success(`Finished copying ${amount} files.`);
   });
 };
 
