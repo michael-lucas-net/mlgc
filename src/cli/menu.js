@@ -29,8 +29,9 @@ function showMenu() {
           copy("branch", path);
           break;
         case "Delete all files in upload-directory":
-          log.info("Deleting files...");
+          log.info("Deleting files and folder...");
           clearFolder(`${path}/${settings.uploadFolderName}`);
+          log.success("Folder cleared successfully.");
           break;
       }
     })
