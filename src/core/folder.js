@@ -1,5 +1,11 @@
 const fileHelper = require("../helpers/fileHelper");
 const { log } = require("../utils/logger");
+const settings = require("../../config/settings");
+const path = require("path");
+
+async function clearCopyFolder() {
+  await clearFolder(`${path}/../${settings["upload-folder-name"]}`);
+}
 
 async function clearFolder(path) {
   try {
@@ -9,4 +15,4 @@ async function clearFolder(path) {
   }
 }
 
-module.exports = { clearFolder };
+module.exports = { clearFolder, clearCopyFolder };

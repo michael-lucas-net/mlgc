@@ -1,11 +1,12 @@
 const { gitCommand } = require("../core/git");
-const { clearFolder } = require("../core/folder");
+const { clearCopyFolder } = require("../core/folder");
 const { log } = require("../utils/logger");
 const fileHelper = require("../helpers/fileHelper");
 const settings = require("../../config/settings");
+const boxen = require("boxen");
 
 async function copy(branchOrCommit, path) {
-  await clearFolder(`${path}/${settings.uploadFolderName}`);
+  await clearCopyFolder();
   const { exec } = require("child_process");
 
   process.chdir(path);
@@ -30,6 +31,22 @@ async function copy(branchOrCommit, path) {
         `${settings["upload-folder-name"]}/${file}`
       );
     }
+
+    // Create a list of files for the box
+    const fileList = files.map((file) => `- ${file}`).join("\n");
+
+    // Display the files in a box
+    const boxContent = boxen(
+      `Copied the following ${files.length} file(s):\n\n${fileList}`,
+      {
+        padding: 1,
+        margin: 1,
+        borderStyle: "round",
+        borderColor: "cyan",
+      }
+    );
+
+    console.log(boxContent);
     log.success(`Copied ${files.length} files.`);
   });
 }

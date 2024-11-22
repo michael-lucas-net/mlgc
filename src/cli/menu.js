@@ -1,7 +1,6 @@
 const { Select } = require("enquirer");
 const { copy } = require("../commands/copy");
-const { clearFolder } = require("../core/folder");
-const settings = require("../../config/settings");
+const { clearCopyFolder } = require("../core/folder");
 const generatePath = require("../helpers/pathHelper");
 const { log } = require("../utils/logger");
 
@@ -30,7 +29,7 @@ function showMenu() {
           break;
         case "Delete all files in upload-directory":
           log.info("Deleting files and folder...");
-          clearFolder(`${path}/${settings.uploadFolderName}`);
+          clearCopyFolder();
           log.success("Folder cleared successfully.");
           break;
       }
