@@ -21,7 +21,7 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "node index.js"
+    "start": "node src/cli/index.js"
   },
   "dependencies": {
     "boxen": "5",
