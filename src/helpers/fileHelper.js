@@ -40,8 +40,6 @@ async function copyFile(source, destination) {
     await createFolder(destinationFolder);
   }
 
-  // if (await folderExists(destination)) return;
-
   try {
     await fs.copyFile(source, destination);
   } catch (err) {

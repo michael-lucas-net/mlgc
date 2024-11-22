@@ -28,18 +28,6 @@ Copy all changes of the current folder
 mlgc
 ```
 
-Copy all changes of the subfolder "src"
-
-```shell
-mlgc src/
-```
-
-Copy all changes of the parent folder "cool_project"
-
-```shell
-mlgc ../cool_project/
-```
-
 ## Notes
 
 - Make sure Git is installed on your system and that your path is a Git repository.

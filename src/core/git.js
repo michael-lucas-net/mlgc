@@ -8,9 +8,9 @@ function getIgnoredFiles() {
 }
 
 function gitCommand(branchOrCommit) {
-  const baseCommand = "git add -N . && git diff --name-only --diff-filter=d ";
+  const baseCommand = "git add -N . && git diff --name-only --diff-filter=d";
   return branchOrCommit === "branch"
-    ? `${baseCommand}origin/${getMainBranch()} ${getIgnoredFiles()}`
+    ? `${baseCommand} origin/${getMainBranch()} ${getIgnoredFiles()}`
     : `${baseCommand} ${getIgnoredFiles()}`;
 }
 
@@ -29,4 +29,4 @@ function getMainBranch() {
   }
 }
 
-module.exports = { gitCommand };
+module.exports = { gitCommand, getMainBranch };

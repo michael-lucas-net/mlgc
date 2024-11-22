@@ -26,16 +26,19 @@ async function copy(branchOrCommit, path) {
     }
 
     for (const file of files) {
-      await fileHelper.copyFile(
-        file,
-        `${settings["upload-folder-name"]}/${file}`
-      );
+      try {
+        await fileHelper.copyFile(
+          file,
+          `${settings["upload-folder-name"]}/${file}`
+        );
+      } catch (err) {
+        // Fehlerbehandlung: Warnung im Log ausgeben
+        log.warn(`Failed to copy file: ${err.message}`);
+      }
     }
 
-    // Create a list of files for the box
     const fileList = files.map((file) => `- ${file}`).join("\n");
 
-    // Display the files in a box
     const boxContent = boxen(
       `Copied the following ${files.length} file(s):\n\n${fileList}`,
       {
@@ -47,7 +50,7 @@ async function copy(branchOrCommit, path) {
     );
 
     console.log(boxContent);
-    log.success(`Copied ${files.length} files.`);
+    log.success(`Copied ${files.length} file(s).`);
   });
 }
 
