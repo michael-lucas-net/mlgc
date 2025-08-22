@@ -111,11 +111,12 @@ describe("showMenu function", () => {
     await showMenu();
 
     const menuChoices = Select.mock.calls[0][0].choices;
-    expect(menuChoices).toHaveLength(3);
+    expect(menuChoices).toHaveLength(4);
     expect(menuChoices).toEqual([
       "Copy current changes to directory for upload",
       "Copy changes from main branch to directory for upload",
       "Delete all files in upload-directory",
+      "Show changelog",
     ]);
   });
 
@@ -241,12 +242,16 @@ describe("showMenu function", () => {
 
     it("should handle enquirer initialization errors", async () => {
       const initError = new Error("Enquirer initialization failed");
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
       Select.mockImplementation(() => {
         throw initError;
       });
 
-      expect(() => showMenu()).toThrow(initError);
+      await showMenu();
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(initError);
+      consoleErrorSpy.mockRestore();
     });
 
     it("should not crash on copy function errors", async () => {
@@ -282,12 +287,16 @@ describe("showMenu function", () => {
     });
 
     it("should handle generatePath errors", async () => {
-      const pathError = new Error("Path generation failed");
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+
       generatePath.mockImplementation(() => {
-        throw pathError;
+        throw new Error("Path generation failed");
       });
 
-      expect(() => showMenu()).toThrow(pathError);
+      await showMenu();
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error));
+      consoleErrorSpy.mockRestore();
     });
 
     it("should call console.error for Select rejection with correct error object", async () => {

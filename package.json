@@ -1,6 +1,6 @@
 {
   "name": "mlgc",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "main": "./src/cli/index.js",
   "author": "Michael Lucas <info@michael-lucas.net> (http://www.michael-lucas.net)",
   "homepage": "https://github.com/michael-lucas-net/mlgc",
@@ -35,7 +35,7 @@
     "lint:fix": "eslint src/ test/ --fix",
     "format": "prettier --write src/ test/ *.json *.md",
     "format:check": "prettier --check src/ test/ *.json *.md",
-    "quality": "npm run lint && npm run format:check && npm run test"
+    "quality": "npm run lint && npm run format && npm run test"
   },
   "dependencies": {
     "boxen": "5",

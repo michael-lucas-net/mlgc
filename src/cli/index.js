@@ -2,5 +2,9 @@
 const { showMenu } = require("./menu");
 const { showWelcome } = require("../commands/welcome");
 
-showWelcome();
-showMenu();
+async function main() {
+  showWelcome();
+  await showMenu();
+}
+
+main().catch(console.error);
