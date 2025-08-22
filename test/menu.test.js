@@ -207,4 +207,161 @@ describe("showMenu function", () => {
 
     expect(generatePath).toHaveBeenCalledWith(process.argv);
   });
+
+  describe("error handling", () => {
+    let consoleErrorSpy;
+
+    beforeEach(() => {
+      consoleErrorSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      // Reset all mocks to clean state
+      jest.clearAllMocks();
+      generatePath.mockReturnValue("/test/path");
+    });
+
+    afterEach(() => {
+      consoleErrorSpy.mockRestore();
+    });
+
+    it("should handle Select promise rejection", async () => {
+      const testError = new Error("User cancelled");
+
+      Select.mockImplementation(() => ({
+        run: jest.fn().mockRejectedValue(testError),
+      }));
+
+      showMenu();
+
+      // Wait a tick for the promise rejection to be handled
+      await new Promise((resolve) => setImmediate(resolve));
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(testError);
+    });
+
+    it("should handle enquirer initialization errors", async () => {
+      const initError = new Error("Enquirer initialization failed");
+
+      Select.mockImplementation(() => {
+        throw initError;
+      });
+
+      expect(() => showMenu()).toThrow(initError);
+    });
+
+    it("should not crash on copy function errors", async () => {
+      const copyError = new Error("Copy operation failed");
+      copy.mockImplementation(() => {
+        throw copyError;
+      });
+
+      Select.mockImplementation(() => ({
+        run: jest
+          .fn()
+          .mockResolvedValue("Copy current changes to directory for upload"),
+      }));
+
+      // This should not throw as the error is in the copy function
+      expect(() => showMenu()).not.toThrow();
+    });
+
+    it("should not crash on clearCopyFolder errors", async () => {
+      const clearError = new Error("Clear folder failed");
+      clearCopyFolder.mockImplementation(() => {
+        throw clearError;
+      });
+
+      Select.mockImplementation(() => ({
+        run: jest
+          .fn()
+          .mockResolvedValue("Delete all files in upload-directory"),
+      }));
+
+      // This should not throw as the error is in the clearCopyFolder function
+      expect(() => showMenu()).not.toThrow();
+    });
+
+    it("should handle generatePath errors", async () => {
+      const pathError = new Error("Path generation failed");
+      generatePath.mockImplementation(() => {
+        throw pathError;
+      });
+
+      expect(() => showMenu()).toThrow(pathError);
+    });
+
+    it("should call console.error for Select rejection with correct error object", async () => {
+      const specificError = new Error("Specific test error");
+      specificError.code = "TEST_ERROR";
+
+      Select.mockImplementation(() => ({
+        run: jest.fn().mockRejectedValue(specificError),
+      }));
+
+      showMenu();
+
+      // Wait a tick for the promise rejection to be handled
+      await new Promise((resolve) => setImmediate(resolve));
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(specificError);
+    });
+  });
+
+  describe("async behavior", () => {
+    beforeEach(() => {
+      // Reset the generatePath mock for these specific tests
+      generatePath.mockReset();
+      generatePath.mockReturnValue("/test/path");
+    });
+
+    it("should wait for Select promise to resolve before proceeding", async () => {
+      let resolveSelect;
+      const selectPromise = new Promise((resolve) => {
+        resolveSelect = resolve;
+      });
+
+      Select.mockImplementation(() => ({
+        run: jest.fn().mockReturnValue(selectPromise),
+      }));
+
+      showMenu();
+
+      // Wait a tick for the menu to start
+      await new Promise((resolve) => setImmediate(resolve));
+
+      // Verify copy hasn't been called yet
+      expect(copy).not.toHaveBeenCalled();
+
+      // Resolve the select promise
+      resolveSelect("Copy current changes to directory for upload");
+      await selectPromise;
+
+      // Wait for the menu promise to complete
+      await new Promise((resolve) => setImmediate(resolve));
+
+      // Now copy should have been called
+      expect(copy).toHaveBeenCalled();
+    });
+
+    it("should handle concurrent menu calls", async () => {
+      Select.mockImplementation(() => ({
+        run: jest
+          .fn()
+          .mockResolvedValue("Copy current changes to directory for upload"),
+      }));
+
+      // Call showMenu multiple times
+      showMenu();
+      showMenu();
+      showMenu();
+
+      // Wait for all promises to settle
+      await new Promise((resolve) => setImmediate(resolve));
+
+      // Each call should generate its own path
+      expect(generatePath).toHaveBeenCalledTimes(3);
+      expect(copy).toHaveBeenCalledTimes(3);
+    });
+  });
 });

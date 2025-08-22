@@ -4,16 +4,8 @@
     "es2022": true,
     "jest": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:node/recommended",
-    "plugin:jest/recommended",
-    "prettier"
-  ],
-  "plugins": [
-    "node",
-    "jest"
-  ],
+  "extends": ["eslint:recommended", "plugin:node/recommended", "plugin:jest/recommended", "prettier"],
+  "plugins": ["node", "jest"],
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module"
@@ -32,14 +24,8 @@
     // Code Quality
     "prefer-const": "error",
     "no-var": "error",
-    "eqeqeq": [
-      "error",
-      "always"
-    ],
-    "curly": [
-      "error",
-      "all"
-    ],
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"],
     // Security
     "no-eval": "error",
     "no-implied-eval": "error",
@@ -67,9 +53,7 @@
   },
   "overrides": [
     {
-      "files": [
-        "test/**/*.js"
-      ],
+      "files": ["test/**/*.js"],
       "env": {
         "jest": true
       },
