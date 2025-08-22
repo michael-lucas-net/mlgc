@@ -11,10 +11,9 @@ jest.mock("chalk", () => ({
 }));
 
 describe("showWelcome", () => {
-  let _consoleLogSpy;
-
   beforeEach(() => {
-    _consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+    // Mock console.log to prevent actual output during tests
+    jest.spyOn(console, "log").mockImplementation(() => {});
     boxen.mockReturnValue("mocked-boxen-output");
     jest.clearAllMocks();
   });

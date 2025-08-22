@@ -10,6 +10,9 @@ ___CHANGES_TO_UPLOAD___/
 coverage/
 .nyc_output/
 
+# Test reports
+test-reports/
+
 # Logs
 *.log
 
@@ -27,3 +30,4 @@ Thumbs.db
 *.bak
 *.old
 *.orig
+jest_html_reporters.html

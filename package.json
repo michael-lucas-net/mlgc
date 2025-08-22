@@ -24,7 +24,12 @@
   },
   "scripts": {
     "test": "jest",
-    "test:coverage": "jest --coverage",
+    "test:coverage": "jest --coverage --verbose",
+    "test:coverage:html": "jest --coverage --coverageReporters=html --verbose",
+    "test:html": "jest --verbose --reporters=default --reporters=jest-html-reporters",
+    "test:full-report": "jest --coverage --coverageReporters=html --verbose --reporters=default --reporters=jest-html-reporters",
+    "test:watch": "jest --watch --verbose",
+    "test:debug": "jest --verbose --no-cache --detectOpenHandles",
     "start": "node src/cli/index.js",
     "lint": "eslint src/ test/",
     "lint:fix": "eslint src/ test/ --fix",
@@ -44,6 +49,43 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-jest": "^27.6.3",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "jest-html-reporters": "^3.1.7"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/**/*.test.js"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html",
+      "json",
+      "text-summary"
+    ],
+    "testMatch": [
+      "**/test/**/*.test.js"
+    ],
+    "verbose": true,
+    "bail": false,
+    "errorOnDeprecated": true,
+    "testTimeout": 10000,
+    "reporters": [
+      "default"
+    ]
+  },
+  "jest-html-reporters": {
+    "publicPath": "./test-reports",
+    "filename": "test-report.html",
+    "openReport": false,
+    "pageTitle": "MLGC Test Report",
+    "logoImgPath": "",
+    "hideIcon": false,
+    "includeFailureMsg": true,
+    "includeSuiteFailure": true,
+    "includeConsoleLog": true
   }
 }
