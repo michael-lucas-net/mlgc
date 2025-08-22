@@ -1,13 +1,45 @@
 {
   "changelog": [
     {
-      "version": "1.4.3",
+      "version": "1.4.4",
       "date": "2025-08-22",
-      "type": "patch",
+      "type": "minor",
       "changes": [
         {
           "type": "feature",
+          "description": "Animierter Changelog mit coolen Animationen hinzugefügt"
+        },
+        {
+          "type": "feature",
+          "description": "Menü-Icons für bessere Benutzerfreundlichkeit hinzugefügt"
+        },
+        {
+          "type": "feature",
           "description": "Umfassende Tests für globale Installation hinzugefügt"
+        },
+        {
+          "type": "fix",
+          "description": "Changelog-Pfad für globale Installation korrigiert"
+        },
+        {
+          "type": "fix",
+          "description": "Settings-Pfad für globale Installation korrigiert"
+        },
+        {
+          "type": "improvement",
+          "description": "Verbesserte Codequalität"
+        },
+        {
+          "type": "improvement",
+          "description": "Visuell ansprechenderes CLI-Interface"
+        },
+        {
+          "type": "improvement",
+          "description": "Package-Dateien für npm publish optimiert"
+        },
+        {
+          "type": "improvement",
+          "description": "Config-Ordner in Package-Dateien eingebunden"
         },
         {
           "type": "improvement",
@@ -16,66 +48,6 @@
         {
           "type": "test",
           "description": "9 neue Tests für globale Installation und Cross-Platform-Kompatibilität"
-        }
-      ]
-    },
-    {
-      "version": "1.4.2",
-      "date": "2025-08-22",
-      "type": "patch",
-      "changes": [
-        {
-          "type": "fix",
-          "description": "Settings-Pfad für globale Installation korrigiert"
-        },
-        {
-          "type": "improvement",
-          "description": "Config-Ordner in Package-Dateien eingebunden"
-        }
-      ]
-    },
-    {
-      "version": "1.4.1",
-      "date": "2025-08-22",
-      "type": "patch",
-      "changes": [
-        {
-          "type": "fix",
-          "description": "Changelog-Pfad für globale Installation korrigiert"
-        },
-        {
-          "type": "improvement",
-          "description": "Package-Dateien für npm publish optimiert"
-        }
-      ]
-    },
-    {
-      "version": "1.4.0",
-      "date": "2025-08-22",
-      "type": "minor",
-      "changes": [
-        {
-          "type": "feature",
-          "description": "Menü-Icons für bessere Benutzerfreundlichkeit hinzugefügt"
-        },
-        {
-          "type": "improvement",
-          "description": "Visuell ansprechenderes CLI-Interface"
-        }
-      ]
-    },
-    {
-      "version": "1.3.0",
-      "date": "2025-08-22",
-      "type": "minor",
-      "changes": [
-        {
-          "type": "improvement",
-          "description": "Verbesserte Codequalität"
-        },
-        {
-          "type": "feature",
-          "description": "Animierter Changelog hinzugefügt"
         }
       ]
     },
