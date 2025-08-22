@@ -1,7 +1,9 @@
 const fs = require("fs").promises;
 
 async function validatePath(path) {
-  if (!path) throw new Error("Invalid path");
+  if (!path) {
+    throw new Error("Invalid path");
+  }
 }
 
 async function createFolder(path) {
@@ -25,7 +27,9 @@ async function folderExists(path) {
 
 async function removeFolder(path) {
   await validatePath(path);
-  if (!(await folderExists(path))) return;
+  if (!(await folderExists(path))) {
+    return;
+  }
   try {
     await fs.rm(path, { recursive: true });
   } catch (err) {

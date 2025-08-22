@@ -3,7 +3,7 @@ const { exec } = require("child_process");
 const { log } = require("../src/utils/logger");
 const fileHelper = require("../src/helpers/fileHelper");
 const settings = require("../config/settings");
-const exp = require("constants");
+// const exp = require("constants"); // Removed unused import
 
 jest.mock("child_process");
 jest.mock("../src/utils/logger");
@@ -14,10 +14,11 @@ jest.mock("../config/settings", () => ({
 }));
 
 describe("copy function", () => {
-  let consoleSpy;
+  // let _consoleSpy; // Removed unused variable
 
   beforeEach(() => {
-    consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+    // Setup console spy for potential future use
+    jest.spyOn(console, "log").mockImplementation(() => {});
     jest.clearAllMocks();
   });
 
@@ -50,7 +51,7 @@ describe("copy function", () => {
 
     await copy("branch", process.cwd());
     expect(fileHelper.copyFile).toHaveBeenCalledTimes(files.length);
-    files.forEach((file, index) => {
+    files.forEach((file, _index) => {
       expect(fileHelper.copyFile).toHaveBeenCalledWith(
         file,
         `${settings["upload-folder-name"]}/${file}`
@@ -73,7 +74,8 @@ describe("copy function", () => {
 
     // Mock log methods
     const successMock = jest.spyOn(log, "success").mockImplementation(() => {});
-    const warnMock = jest.spyOn(log, "warn").mockImplementation(() => {});
+    // Mock warn method for potential future use
+    jest.spyOn(log, "warn").mockImplementation(() => {});
 
     // Mock fileHelper.copyFile to simulate successful copying
     fileHelper.copyFile = jest.fn().mockResolvedValue(undefined);
@@ -112,7 +114,7 @@ describe("copy function", () => {
       require("child_process").exec = execMock;
 
       // Mock log.warn
-      const warnMock = jest.spyOn(log, "warn").mockImplementation(() => {});
+      const _warnMock = jest.spyOn(log, "warn").mockImplementation(() => {});
 
       // Mock process.chdir
       const originalChdir = process.chdir;
@@ -125,7 +127,7 @@ describe("copy function", () => {
         setImmediate(() => {
           try {
             // Verify that a warning was logged
-            expect(warnMock).toHaveBeenCalledWith("No changes found.");
+            expect(_warnMock).toHaveBeenCalledWith("No changes found.");
             resolve();
           } catch (error) {
             resolve(error);
@@ -207,7 +209,7 @@ describe("copy function", () => {
       fileHelper.copyFile = copyFileMock;
 
       // Mock log.warn
-      const warnMock = jest.spyOn(log, "warn").mockImplementation(() => {});
+      const _warnMock = jest.spyOn(log, "warn").mockImplementation(() => {});
 
       // Call the copy function and await its completion
       await new Promise((resolve) => {
@@ -216,7 +218,7 @@ describe("copy function", () => {
         setImmediate(() => {
           try {
             // Verify that warning was logged for failed file copy
-            expect(warnMock).toHaveBeenCalledWith(
+            expect(_warnMock).toHaveBeenCalledWith(
               "Failed to copy file: Copy failed"
             );
             // Verify that other files were still attempted to be copied

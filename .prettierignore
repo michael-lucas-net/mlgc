@@ -1,25 +1,29 @@
+# Dependencies
 node_modules/
-yarn.lock
-___CHANGES_TO_UPLOAD___/
 
-# ESLint and Prettier cache
-.eslintcache
-.prettiercache
-
-# Test coverage
+# Build outputs
+dist/
+build/
 coverage/
-.nyc_output/
 
 # Logs
 *.log
+
+# Cache
+.eslintcache
+.prettiercache
 
 # OS generated files
 .DS_Store
 Thumbs.db
 
-# IDE files
+# IDE
 .vscode/
 .idea/
+
+# Test coverage
+coverage/
+.nyc_output/
 
 # Temporary files
 *.tmp

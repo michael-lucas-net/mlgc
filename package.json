@@ -16,12 +16,21 @@
     "cli"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "bin": {
     "mlgc": "./src/cli/index.js"
   },
   "scripts": {
     "test": "jest",
-    "start": "node src/cli/index.js"
+    "test:coverage": "jest --coverage",
+    "start": "node src/cli/index.js",
+    "lint": "eslint src/ test/",
+    "lint:fix": "eslint src/ test/ --fix",
+    "format": "prettier --write src/ test/ *.json *.md",
+    "format:check": "prettier --check src/ test/ *.json *.md",
+    "quality": "npm run lint && npm run format:check && npm run test"
   },
   "dependencies": {
     "boxen": "5",
@@ -30,6 +39,11 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "mock-require": "^3.0.3"
+    "mock-require": "^3.0.3",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-jest": "^27.6.3",
+    "prettier": "^3.2.5"
   }
 }
