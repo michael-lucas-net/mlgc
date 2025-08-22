@@ -56,8 +56,8 @@ async function animateText(text, delay = ANIMATION_SPEED.CHANGE_TYPEWRITER) {
 
 async function showChangelog() {
   try {
-    // Lade Changelog-Daten
-    const changelogPath = path.join(process.cwd(), "changelog.json");
+    // Lade Changelog-Daten - verwende __dirname um das Package-Verzeichnis zu finden
+    const changelogPath = path.join(__dirname, "..", "..", "changelog.json");
 
     if (!fs.existsSync(changelogPath)) {
       console.log(chalk.red("❌ Changelog.json nicht gefunden!"));

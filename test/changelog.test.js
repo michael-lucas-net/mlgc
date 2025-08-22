@@ -61,7 +61,13 @@ afterEach(() => {
 
 describe("Changelog", () => {
   const { showChangelog } = require("../src/commands/changelog");
-  const testChangelogPath = path.join(process.cwd(), "changelog.json");
+  const testChangelogPath = path.join(
+    __dirname,
+    "..",
+    "src",
+    "..",
+    "changelog.json"
+  );
   const mockChangelogData = {
     changelog: [
       {

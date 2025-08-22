@@ -1,7 +1,6 @@
 const { showMenu } = require("../src/cli/menu");
 const { copy } = require("../src/commands/copy");
 const { clearCopyFolder } = require("../src/core/folder");
-const { showChangelog } = require("../src/commands/changelog");
 const generatePath = require("../src/helpers/pathHelper");
 const { log } = require("../src/utils/logger");
 
@@ -62,7 +61,9 @@ describe("showMenu function", () => {
 
     await showMenu();
 
-    expect(log.info).toHaveBeenCalledWith("🌿 Copying changes from main branch...");
+    expect(log.info).toHaveBeenCalledWith(
+      "🌿 Copying changes from main branch..."
+    );
   });
 
   it("should clear copy folder and log success", async () => {
@@ -271,7 +272,7 @@ describe("showMenu function", () => {
 
     it("should handle generatePath errors", async () => {
       const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-      
+
       generatePath.mockImplementation(() => {
         throw new Error("Path generation failed");
       });

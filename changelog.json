@@ -1,6 +1,21 @@
 {
   "changelog": [
     {
+      "version": "1.4.1",
+      "date": "2025-08-22",
+      "type": "patch",
+      "changes": [
+        {
+          "type": "fix",
+          "description": "Changelog-Pfad für globale Installation korrigiert"
+        },
+        {
+          "type": "improvement",
+          "description": "Package-Dateien für npm publish optimiert"
+        }
+      ]
+    },
+    {
       "version": "1.4.0",
       "date": "2025-08-22",
       "type": "minor",

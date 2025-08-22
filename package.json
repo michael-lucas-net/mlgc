@@ -1,6 +1,6 @@
 {
   "name": "mlgc",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "./src/cli/index.js",
   "author": "Michael Lucas <info@michael-lucas.net> (http://www.michael-lucas.net)",
   "homepage": "https://github.com/michael-lucas-net/mlgc",
@@ -22,6 +22,10 @@
   "bin": {
     "mlgc": "./src/cli/index.js"
   },
+  "files": [
+    "src/",
+    "changelog.json"
+  ],
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage --verbose",
