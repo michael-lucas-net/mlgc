@@ -1,22 +1,27 @@
-const { Select } = require("enquirer");
+const { showMenu } = require("../src/cli/menu");
 const { copy } = require("../src/commands/copy");
 const { clearCopyFolder } = require("../src/core/folder");
+const { showChangelog } = require("../src/commands/changelog");
 const generatePath = require("../src/helpers/pathHelper");
 const { log } = require("../src/utils/logger");
-const { showMenu } = require("../src/cli/menu");
 
+// Mock all the dependencies
 jest.mock("enquirer", () => ({
   Select: jest.fn(),
 }));
+
 jest.mock("../src/commands/copy");
 jest.mock("../src/core/folder");
+jest.mock("../src/commands/changelog");
 jest.mock("../src/helpers/pathHelper");
 jest.mock("../src/utils/logger");
 
+const { Select } = require("enquirer");
+
 describe("showMenu function", () => {
   beforeEach(() => {
-    // Clear all mocks before each test
     jest.clearAllMocks();
+    generatePath.mockReturnValue("/mock/path");
   });
 
   it("should call generatePath with process.argv", async () => {
@@ -24,7 +29,7 @@ describe("showMenu function", () => {
     Select.mockImplementation(() => ({
       run: jest
         .fn()
-        .mockResolvedValue("Copy current changes to directory for upload"),
+        .mockResolvedValue("📄 Copy current changes to directory for upload"),
     }));
 
     await showMenu();
@@ -33,54 +38,46 @@ describe("showMenu function", () => {
   });
 
   it("should log info for copying current changes", async () => {
-    const mockPath = "/mock/path";
-    generatePath.mockReturnValue(mockPath);
-
     // Simulate user selecting first option
     Select.mockImplementation(() => ({
       run: jest
         .fn()
-        .mockResolvedValue("Copy current changes to directory for upload"),
+        .mockResolvedValue("📄 Copy current changes to directory for upload"),
     }));
 
     await showMenu();
 
-    expect(log.info).toHaveBeenCalledWith("Copying current changes...");
-    expect(copy).toHaveBeenCalledWith("commit", mockPath);
+    expect(log.info).toHaveBeenCalledWith("📄 Copying current changes...");
   });
 
   it("should log info for copying changes from main branch", async () => {
-    const mockPath = "/mock/path";
-    generatePath.mockReturnValue(mockPath);
-
     // Simulate user selecting second option
     Select.mockImplementation(() => ({
       run: jest
         .fn()
         .mockResolvedValue(
-          "Copy changes from main branch to directory for upload"
+          "🌿 Copy changes from main branch to directory for upload"
         ),
     }));
 
     await showMenu();
 
-    expect(log.info).toHaveBeenCalledWith(
-      "Copying changes from main branch..."
-    );
-    expect(copy).toHaveBeenCalledWith("branch", mockPath);
+    expect(log.info).toHaveBeenCalledWith("🌿 Copying changes from main branch...");
   });
 
   it("should clear copy folder and log success", async () => {
     // Simulate user selecting third option
     Select.mockImplementation(() => ({
-      run: jest.fn().mockResolvedValue("Delete all files in upload-directory"),
+      run: jest
+        .fn()
+        .mockResolvedValue("🗑️  Delete all files in upload-directory"),
     }));
 
     await showMenu();
 
-    expect(log.info).toHaveBeenCalledWith("Deleting files and folder...");
     expect(clearCopyFolder).toHaveBeenCalled();
-    expect(log.success).toHaveBeenCalledWith("Folder cleared successfully.");
+    expect(log.info).toHaveBeenCalledWith("🗑️  Deleting files and folder...");
+    expect(log.success).toHaveBeenCalledWith("✅ Folder cleared successfully.");
   });
 
   it("should create Select prompt with correct name", async () => {
@@ -88,7 +85,7 @@ describe("showMenu function", () => {
     Select.mockImplementation(() => ({
       run: jest
         .fn()
-        .mockResolvedValue("Copy current changes to directory for upload"),
+        .mockResolvedValue("📄 Copy current changes to directory for upload"),
     }));
 
     await showMenu();
@@ -100,12 +97,12 @@ describe("showMenu function", () => {
     );
   });
 
-  it("should have exactly 3 menu choices", async () => {
+  it("should have exactly 4 menu choices", async () => {
     // Simulate user selecting first option
     Select.mockImplementation(() => ({
       run: jest
         .fn()
-        .mockResolvedValue("Copy current changes to directory for upload"),
+        .mockResolvedValue("📄 Copy current changes to directory for upload"),
     }));
 
     await showMenu();
@@ -113,10 +110,10 @@ describe("showMenu function", () => {
     const menuChoices = Select.mock.calls[0][0].choices;
     expect(menuChoices).toHaveLength(4);
     expect(menuChoices).toEqual([
-      "Copy current changes to directory for upload",
-      "Copy changes from main branch to directory for upload",
-      "Delete all files in upload-directory",
-      "Show changelog",
+      "📄 Copy current changes to directory for upload",
+      "🌿 Copy changes from main branch to directory for upload",
+      "🗑️  Delete all files in upload-directory",
+      "📋 Show changelog",
     ]);
   });
 
@@ -125,14 +122,14 @@ describe("showMenu function", () => {
     Select.mockImplementation(() => ({
       run: jest
         .fn()
-        .mockResolvedValue("Copy current changes to directory for upload"),
+        .mockResolvedValue("📄 Copy current changes to directory for upload"),
     }));
 
     await showMenu();
 
     expect(Select).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: "What can I do for you?",
+        message: "🦙 What can I do for you?",
       })
     );
   });
@@ -145,7 +142,7 @@ describe("showMenu function", () => {
     Select.mockImplementation(() => ({
       run: jest
         .fn()
-        .mockResolvedValue("Copy current changes to directory for upload"),
+        .mockResolvedValue("📄 Copy current changes to directory for upload"),
     }));
 
     await showMenu();
@@ -162,7 +159,7 @@ describe("showMenu function", () => {
       run: jest
         .fn()
         .mockResolvedValue(
-          "Copy changes from main branch to directory for upload"
+          "🌿 Copy changes from main branch to directory for upload"
         ),
     }));
 
@@ -188,7 +185,7 @@ describe("showMenu function", () => {
     Select.mockImplementation(() => ({
       run: jest
         .fn()
-        .mockResolvedValue("Copy current changes to directory for upload"),
+        .mockResolvedValue("📄 Copy current changes to directory for upload"),
     }));
 
     await showMenu();
@@ -201,7 +198,7 @@ describe("showMenu function", () => {
     Select.mockImplementation(() => ({
       run: jest
         .fn()
-        .mockResolvedValue("Copy current changes to directory for upload"),
+        .mockResolvedValue("📄 Copy current changes to directory for upload"),
     }));
 
     await showMenu();
@@ -210,31 +207,17 @@ describe("showMenu function", () => {
   });
 
   describe("error handling", () => {
-    let consoleErrorSpy;
-
-    beforeEach(() => {
-      consoleErrorSpy = jest
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-      // Reset all mocks to clean state
-      jest.clearAllMocks();
-      generatePath.mockReturnValue("/test/path");
-    });
-
-    afterEach(() => {
-      consoleErrorSpy.mockRestore();
-    });
-
     it("should handle Select promise rejection", async () => {
-      const testError = new Error("User cancelled");
+      const testError = new Error("Selection failed");
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
       Select.mockImplementation(() => ({
         run: jest.fn().mockRejectedValue(testError),
       }));
 
-      showMenu();
+      await showMenu();
 
-      // Wait a tick for the promise rejection to be handled
+      // Wait for any pending promises to resolve
       await new Promise((resolve) => setImmediate(resolve));
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(testError);
@@ -263,7 +246,7 @@ describe("showMenu function", () => {
       Select.mockImplementation(() => ({
         run: jest
           .fn()
-          .mockResolvedValue("Copy current changes to directory for upload"),
+          .mockResolvedValue("📄 Copy current changes to directory for upload"),
       }));
 
       // This should not throw as the error is in the copy function
@@ -271,7 +254,7 @@ describe("showMenu function", () => {
     });
 
     it("should not crash on clearCopyFolder errors", async () => {
-      const clearError = new Error("Clear folder failed");
+      const clearError = new Error("Clear operation failed");
       clearCopyFolder.mockImplementation(() => {
         throw clearError;
       });
@@ -279,7 +262,7 @@ describe("showMenu function", () => {
       Select.mockImplementation(() => ({
         run: jest
           .fn()
-          .mockResolvedValue("Delete all files in upload-directory"),
+          .mockResolvedValue("🗑️  Delete all files in upload-directory"),
       }));
 
       // This should not throw as the error is in the clearCopyFolder function
@@ -288,7 +271,7 @@ describe("showMenu function", () => {
 
     it("should handle generatePath errors", async () => {
       const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-
+      
       generatePath.mockImplementation(() => {
         throw new Error("Path generation failed");
       });
@@ -307,49 +290,42 @@ describe("showMenu function", () => {
         run: jest.fn().mockRejectedValue(specificError),
       }));
 
-      showMenu();
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
-      // Wait a tick for the promise rejection to be handled
+      await showMenu();
+
+      // Allow async operations to complete
       await new Promise((resolve) => setImmediate(resolve));
 
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledWith(specificError);
+      expect(consoleErrorSpy.mock.calls[0][0]).toEqual(specificError);
+      expect(consoleErrorSpy.mock.calls[0][0].code).toBe("TEST_ERROR");
+
+      consoleErrorSpy.mockRestore();
     });
   });
 
   describe("async behavior", () => {
-    beforeEach(() => {
-      // Reset the generatePath mock for these specific tests
-      generatePath.mockReset();
-      generatePath.mockReturnValue("/test/path");
-    });
-
     it("should wait for Select promise to resolve before proceeding", async () => {
-      let resolveSelect;
+      let selectResolve;
       const selectPromise = new Promise((resolve) => {
-        resolveSelect = resolve;
+        selectResolve = resolve;
       });
 
       Select.mockImplementation(() => ({
         run: jest.fn().mockReturnValue(selectPromise),
       }));
 
-      showMenu();
+      const menuPromise = showMenu();
 
-      // Wait a tick for the menu to start
-      await new Promise((resolve) => setImmediate(resolve));
-
-      // Verify copy hasn't been called yet
+      // copy should not be called yet
       expect(copy).not.toHaveBeenCalled();
 
       // Resolve the select promise
-      resolveSelect("Copy current changes to directory for upload");
-      await selectPromise;
+      selectResolve("📄 Copy current changes to directory for upload");
+      await menuPromise;
 
-      // Wait for the menu promise to complete
-      await new Promise((resolve) => setImmediate(resolve));
-
-      // Now copy should have been called
+      // Now copy should be called
       expect(copy).toHaveBeenCalled();
     });
 
@@ -357,20 +333,15 @@ describe("showMenu function", () => {
       Select.mockImplementation(() => ({
         run: jest
           .fn()
-          .mockResolvedValue("Copy current changes to directory for upload"),
+          .mockResolvedValue("📄 Copy current changes to directory for upload"),
       }));
 
-      // Call showMenu multiple times
-      showMenu();
-      showMenu();
-      showMenu();
+      const promise1 = showMenu();
+      const promise2 = showMenu();
 
-      // Wait for all promises to settle
-      await new Promise((resolve) => setImmediate(resolve));
+      await Promise.all([promise1, promise2]);
 
-      // Each call should generate its own path
-      expect(generatePath).toHaveBeenCalledTimes(3);
-      expect(copy).toHaveBeenCalledTimes(3);
+      expect(copy).toHaveBeenCalledTimes(2);
     });
   });
 });

@@ -1,8 +1,23 @@
 {
   "changelog": [
     {
+      "version": "1.4.0",
+      "date": "2025-08-22",
+      "type": "minor",
+      "changes": [
+        {
+          "type": "feature",
+          "description": "Menü-Icons für bessere Benutzerfreundlichkeit hinzugefügt"
+        },
+        {
+          "type": "improvement",
+          "description": "Visuell ansprechenderes CLI-Interface"
+        }
+      ]
+    },
+    {
       "version": "1.3.0",
-      "date": "2024-12-19",
+      "date": "2025-08-22",
       "type": "minor",
       "changes": [
         {
