@@ -1,6 +1,6 @@
 {
   "name": "mlgc",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "main": "./src/cli/index.js",
   "author": "Michael Lucas <info@michael-lucas.net> (http://www.michael-lucas.net)",
   "homepage": "https://github.com/michael-lucas-net/mlgc",
@@ -24,6 +24,7 @@
   },
   "files": [
     "src/",
+    "config/",
     "changelog.json"
   ],
   "scripts": {
@@ -79,7 +80,9 @@
     "testTimeout": 10000,
     "reporters": [
       "default"
-    ]
+    ],
+    "forceExit": true,
+    "detectOpenHandles": false
   },
   "jest-html-reporters": {
     "publicPath": "./test-reports",

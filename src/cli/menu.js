@@ -9,7 +9,7 @@ async function showMenu() {
   try {
     const path = generatePath(process.argv);
 
-    const answer = await new Select({
+    const prompt = new Select({
       name: "menu",
       message: "🦙 What can I do for you?",
       choices: [
@@ -18,7 +18,9 @@ async function showMenu() {
         "🗑️  Delete all files in upload-directory",
         "📋 Show changelog",
       ],
-    }).run();
+    });
+
+    const answer = await prompt.run();
 
     switch (answer) {
       case "📄 Copy current changes to directory for upload":

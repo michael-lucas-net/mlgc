@@ -1,4 +1,7 @@
-const settings = require("../../config/settings");
+const path = require("path");
+const settings = require(
+  path.join(__dirname, "..", "..", "config", "settings")
+);
 const { execSync } = require("child_process");
 
 function getIgnoredFiles() {

@@ -1,6 +1,40 @@
 {
   "changelog": [
     {
+      "version": "1.4.3",
+      "date": "2025-08-22",
+      "type": "patch",
+      "changes": [
+        {
+          "type": "feature",
+          "description": "Umfassende Tests für globale Installation hinzugefügt"
+        },
+        {
+          "type": "improvement",
+          "description": "Bessere Testabdeckung für Package-Struktur und Pfad-Auflösung"
+        },
+        {
+          "type": "test",
+          "description": "9 neue Tests für globale Installation und Cross-Platform-Kompatibilität"
+        }
+      ]
+    },
+    {
+      "version": "1.4.2",
+      "date": "2025-08-22",
+      "type": "patch",
+      "changes": [
+        {
+          "type": "fix",
+          "description": "Settings-Pfad für globale Installation korrigiert"
+        },
+        {
+          "type": "improvement",
+          "description": "Config-Ordner in Package-Dateien eingebunden"
+        }
+      ]
+    },
+    {
       "version": "1.4.1",
       "date": "2025-08-22",
       "type": "patch",
