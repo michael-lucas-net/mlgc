@@ -32,7 +32,7 @@ async function copy(branchOrCommit, path) {
           `${settings["upload-folder-name"]}/${file}`
         );
       } catch (err) {
-        // Fehlerbehandlung: Warnung im Log ausgeben
+        // Error handling: log warning
         log.warn(`Failed to copy file: ${err.message}`);
       }
     }

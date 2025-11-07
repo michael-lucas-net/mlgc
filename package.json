@@ -1,6 +1,6 @@
 {
   "name": "mlgc",
-  "version": "1.4.4",
+  "version": "1.5.0",
   "main": "./src/cli/index.js",
   "author": "Michael Lucas <info@michael-lucas.net> (http://www.michael-lucas.net)",
   "homepage": "https://github.com/michael-lucas-net/mlgc",

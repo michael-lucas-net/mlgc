@@ -1,53 +1,68 @@
 {
   "changelog": [
     {
+      "version": "1.5.0",
+      "date": "2025-08-22",
+      "type": "minor",
+      "changes": [
+        {
+          "type": "feature",
+          "description": "Full English translation of CLI interface and changelog"
+        },
+        {
+          "type": "improvement",
+          "description": "All user-facing messages and error messages translated to English"
+        }
+      ]
+    },
+    {
       "version": "1.4.4",
       "date": "2025-08-22",
       "type": "minor",
       "changes": [
         {
           "type": "feature",
-          "description": "Animierter Changelog mit coolen Animationen hinzugefügt"
+          "description": "Animated changelog with cool animations added"
         },
         {
           "type": "feature",
-          "description": "Menü-Icons für bessere Benutzerfreundlichkeit hinzugefügt"
+          "description": "Menu icons added for better user experience"
         },
         {
           "type": "feature",
-          "description": "Umfassende Tests für globale Installation hinzugefügt"
+          "description": "Comprehensive tests for global installation added"
         },
         {
           "type": "fix",
-          "description": "Changelog-Pfad für globale Installation korrigiert"
+          "description": "Changelog path for global installation corrected"
         },
         {
           "type": "fix",
-          "description": "Settings-Pfad für globale Installation korrigiert"
+          "description": "Settings path for global installation corrected"
         },
         {
           "type": "improvement",
-          "description": "Verbesserte Codequalität"
+          "description": "Improved code quality"
         },
         {
           "type": "improvement",
-          "description": "Visuell ansprechenderes CLI-Interface"
+          "description": "More visually appealing CLI interface"
         },
         {
           "type": "improvement",
-          "description": "Package-Dateien für npm publish optimiert"
+          "description": "Package files optimized for npm publish"
         },
         {
           "type": "improvement",
-          "description": "Config-Ordner in Package-Dateien eingebunden"
+          "description": "Config folder included in package files"
         },
         {
           "type": "improvement",
-          "description": "Bessere Testabdeckung für Package-Struktur und Pfad-Auflösung"
+          "description": "Better test coverage for package structure and path resolution"
         },
         {
           "type": "test",
-          "description": "9 neue Tests für globale Installation und Cross-Platform-Kompatibilität"
+          "description": "9 new tests for global installation and cross-platform compatibility"
         }
       ]
     },
@@ -58,7 +73,7 @@
       "changes": [
         {
           "type": "fix",
-          "description": "Sicherheitsanpassungen"
+          "description": "Security adjustments"
         }
       ]
     }
