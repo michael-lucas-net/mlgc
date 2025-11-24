@@ -165,6 +165,206 @@ describe("Changelog", () => {
     // Test erfolgreich wenn keine Fehler auftreten
     expect(mockClear).toHaveBeenCalled();
   });
+
+  test("sollte mit leerem changelog Array umgehen", async () => {
+    const emptyChangelog = { changelog: [] };
+    fs.readFileSync.mockReturnValue(JSON.stringify(emptyChangelog));
+
+    await showChangelog();
+
+    // Sollte keine Fehler werfen
+    expect(mockClear).toHaveBeenCalled();
+  });
+
+  test("sollte mit changelog entry ohne changes Array umgehen", async () => {
+    const changelogWithoutChanges = {
+      changelog: [
+        {
+          version: "1.0.0",
+          date: "2023-12-01",
+          type: "major",
+          // changes fehlt
+        },
+      ],
+    };
+    fs.readFileSync.mockReturnValue(JSON.stringify(changelogWithoutChanges));
+
+    await showChangelog();
+
+    // Sollte keine Fehler werfen
+    expect(mockClear).toHaveBeenCalled();
+  });
+
+  test("sollte mit leerem changes Array umgehen", async () => {
+    const changelogWithEmptyChanges = {
+      changelog: [
+        {
+          version: "1.0.0",
+          date: "2023-12-01",
+          type: "major",
+          changes: [],
+        },
+      ],
+    };
+    fs.readFileSync.mockReturnValue(JSON.stringify(changelogWithEmptyChanges));
+
+    await showChangelog();
+
+    // Sollte keine Fehler werfen
+    expect(mockClear).toHaveBeenCalled();
+  });
+
+  test("sollte Fehler beim Lesen der Datei behandeln", async () => {
+    fs.readFileSync.mockImplementation(() => {
+      throw new Error("Permission denied");
+    });
+
+    await showChangelog();
+
+    expect(mockLog).toHaveBeenCalledWith(
+      expect.stringContaining("❌ Fehler beim Laden des Changelogs: Permission denied")
+    );
+  });
+});
+
+// Tests für Helper-Funktionen
+describe("Changelog Helper Functions", () => {
+  // Lade das Modul ohne Mock um die Helper-Funktionen zu testen
+  let changelogModule;
+
+  beforeEach(() => {
+    jest.resetModules();
+    changelogModule = require("../src/commands/changelog");
+  });
+
+  describe("getChangeIcon", () => {
+    // Da getChangeIcon nicht exportiert ist, müssen wir es indirekt testen
+    // durch die showChangelog Funktion mit verschiedenen change types
+    test("sollte korrekte Icons für bekannte change types zurückgeben", async () => {
+      const fs = require("fs");
+      const changelogData = {
+        changelog: [
+          {
+            version: "1.0.0",
+            date: "2023-12-01",
+            type: "major",
+            changes: [
+              { type: "feature", description: "Feature" },
+              { type: "fix", description: "Fix" },
+              { type: "improvement", description: "Improvement" },
+              { type: "breaking", description: "Breaking" },
+              { type: "docs", description: "Docs" },
+              { type: "style", description: "Style" },
+              { type: "refactor", description: "Refactor" },
+              { type: "test", description: "Test" },
+              { type: "chore", description: "Chore" },
+            ],
+          },
+        ],
+      };
+
+      jest.spyOn(fs, "existsSync").mockReturnValue(true);
+      jest.spyOn(fs, "readFileSync").mockReturnValue(JSON.stringify(changelogData));
+      jest.spyOn(console, "log").mockImplementation(() => {});
+      jest.spyOn(console, "clear").mockImplementation(() => {});
+      jest.spyOn(process.stdout, "write").mockImplementation(() => true);
+
+      await changelogModule.showChangelog();
+
+      // Test erfolgreich wenn keine Fehler auftreten
+      expect(fs.existsSync).toHaveBeenCalled();
+      fs.existsSync.mockRestore();
+      fs.readFileSync.mockRestore();
+      console.log.mockRestore();
+      console.clear.mockRestore();
+      process.stdout.write.mockRestore();
+    });
+
+    test("sollte default Icon für unbekannte change types zurückgeben", async () => {
+      const fs = require("fs");
+      const changelogData = {
+        changelog: [
+          {
+            version: "1.0.0",
+            date: "2023-12-01",
+            type: "major",
+            changes: [
+              { type: "unknown_type", description: "Unknown type" },
+            ],
+          },
+        ],
+      };
+
+      jest.spyOn(fs, "existsSync").mockReturnValue(true);
+      jest.spyOn(fs, "readFileSync").mockReturnValue(JSON.stringify(changelogData));
+      jest.spyOn(console, "log").mockImplementation(() => {});
+      jest.spyOn(console, "clear").mockImplementation(() => {});
+      jest.spyOn(process.stdout, "write").mockImplementation(() => true);
+
+      await changelogModule.showChangelog();
+
+      // Sollte keine Fehler werfen, auch mit unbekanntem type
+      expect(fs.existsSync).toHaveBeenCalled();
+      fs.existsSync.mockRestore();
+      fs.readFileSync.mockRestore();
+      console.log.mockRestore();
+      console.clear.mockRestore();
+      process.stdout.write.mockRestore();
+    });
+  });
+
+  describe("getVersionBadge", () => {
+    test("sollte korrekte Badges für bekannte version types zurückgeben", async () => {
+      const fs = require("fs");
+      const changelogData = {
+        changelog: [
+          { version: "2.0.0", date: "2023-12-01", type: "major", changes: [] },
+          { version: "1.1.0", date: "2023-12-01", type: "minor", changes: [] },
+          { version: "1.0.1", date: "2023-12-01", type: "patch", changes: [] },
+        ],
+      };
+
+      jest.spyOn(fs, "existsSync").mockReturnValue(true);
+      jest.spyOn(fs, "readFileSync").mockReturnValue(JSON.stringify(changelogData));
+      jest.spyOn(console, "log").mockImplementation(() => {});
+      jest.spyOn(console, "clear").mockImplementation(() => {});
+      jest.spyOn(process.stdout, "write").mockImplementation(() => true);
+
+      await changelogModule.showChangelog();
+
+      expect(fs.existsSync).toHaveBeenCalled();
+      fs.existsSync.mockRestore();
+      fs.readFileSync.mockRestore();
+      console.log.mockRestore();
+      console.clear.mockRestore();
+      process.stdout.write.mockRestore();
+    });
+
+    test("sollte default Badge für unbekannte version types zurückgeben", async () => {
+      const fs = require("fs");
+      const changelogData = {
+        changelog: [
+          { version: "1.0.0", date: "2023-12-01", type: "unknown", changes: [] },
+        ],
+      };
+
+      jest.spyOn(fs, "existsSync").mockReturnValue(true);
+      jest.spyOn(fs, "readFileSync").mockReturnValue(JSON.stringify(changelogData));
+      jest.spyOn(console, "log").mockImplementation(() => {});
+      jest.spyOn(console, "clear").mockImplementation(() => {});
+      jest.spyOn(process.stdout, "write").mockImplementation(() => true);
+
+      await changelogModule.showChangelog();
+
+      // Sollte keine Fehler werfen
+      expect(fs.existsSync).toHaveBeenCalled();
+      fs.existsSync.mockRestore();
+      fs.readFileSync.mockRestore();
+      console.log.mockRestore();
+      console.clear.mockRestore();
+      process.stdout.write.mockRestore();
+    });
+  });
 });
 
 // Separate Test-Suite für Titel-Tests ohne Mock

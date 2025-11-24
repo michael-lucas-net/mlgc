@@ -1,6 +1,17 @@
 {
   "changelog": [
     {
+      "version": "1.6.0",
+      "date": "2025-11-24",
+      "type": "minor",
+      "changes": [
+        {
+          "type": "improvement",
+          "description": "Updated dependencies"
+        }
+      ]
+    },
+    {
       "version": "1.5.1",
       "date": "2025-11-24",
       "type": "minor",

@@ -3,7 +3,7 @@ const { clearCopyFolder } = require("../core/folder");
 const { log } = require("../utils/logger");
 const fileHelper = require("../helpers/fileHelper");
 const settings = require("../../config/settings");
-const boxen = require("boxen");
+const boxen = require("boxen").default || require("boxen");
 
 async function copy(branchOrCommit, path) {
   await clearCopyFolder();

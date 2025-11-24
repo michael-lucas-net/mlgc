@@ -181,6 +181,21 @@ describe("showMenu function", () => {
     expect(clearCopyFolder).not.toHaveBeenCalled();
   });
 
+  it("should call showChangelog when changelog option is selected", async () => {
+    const { showChangelog } = require("../src/commands/changelog");
+    showChangelog.mockResolvedValue();
+
+    Select.mockImplementation(() => ({
+      run: jest
+        .fn()
+        .mockResolvedValue("📋 Show changelog"),
+    }));
+
+    await showMenu();
+
+    expect(showChangelog).toHaveBeenCalled();
+  });
+
   it("should call generatePath only once per menu interaction", async () => {
     // Simulate user selecting first option
     Select.mockImplementation(() => ({
@@ -280,6 +295,27 @@ describe("showMenu function", () => {
       await showMenu();
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error));
+      consoleErrorSpy.mockRestore();
+    });
+
+    it("should handle showChangelog errors", async () => {
+      const { showChangelog } = require("../src/commands/changelog");
+      const changelogError = new Error("Changelog failed");
+      showChangelog.mockRejectedValue(changelogError);
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+
+      Select.mockImplementation(() => ({
+        run: jest
+          .fn()
+          .mockResolvedValue("📋 Show changelog"),
+      }));
+
+      await showMenu();
+
+      // showChangelog sollte aufgerufen werden
+      expect(showChangelog).toHaveBeenCalled();
+      // Fehler sollte abgefangen werden
+      expect(consoleErrorSpy).toHaveBeenCalledWith(changelogError);
       consoleErrorSpy.mockRestore();
     });
 

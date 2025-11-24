@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const boxen = require("boxen");
+const boxen = require("boxen").default || require("boxen");
 const fs = require("fs");
 const path = require("path");
 

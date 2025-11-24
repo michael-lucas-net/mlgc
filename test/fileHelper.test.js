@@ -123,6 +123,24 @@ describe("FileHelpers", () => {
     it("should handle empty path validation for removeFolder", async () => {
       await expect(removeFolder("")).rejects.toThrow("Invalid path");
     });
+
+    it("should handle mkdir errors in createFolder", async () => {
+      const mkdirError = new Error("Permission denied");
+      fs.mkdir.mockRejectedValue(mkdirError);
+
+      await expect(createFolder("/restricted/path")).rejects.toThrow(
+        "Failed to create folder: Permission denied"
+      );
+    });
+
+    it("should handle different mkdir error types", async () => {
+      const mkdirError = new Error("Disk full");
+      fs.mkdir.mockRejectedValue(mkdirError);
+
+      await expect(createFolder("/path")).rejects.toThrow(
+        "Failed to create folder: Disk full"
+      );
+    });
   });
 
   describe("Integration tests", () => {

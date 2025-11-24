@@ -1,4 +1,4 @@
-const boxen = require("boxen");
+const boxen = require("boxen").default || require("boxen");
 const chalk = require("chalk");
 
 function showWelcome() {
