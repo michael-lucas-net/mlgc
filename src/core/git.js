@@ -23,6 +23,10 @@ function getMainBranch() {
     const output = execSync("git symbolic-ref refs/remotes/origin/HEAD", {
       encoding: "utf-8",
     });
+    // Prüfe ob output existiert und nicht leer ist
+    if (!output || typeof output !== "string") {
+      throw new Error("Empty or invalid output");
+    }
     // Extrahiere den Branch-Namen aus dem Pfad
     return output.trim().split("/").pop();
   } catch (error) {

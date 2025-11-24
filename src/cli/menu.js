@@ -33,7 +33,7 @@ async function showMenu() {
         break;
       case "🗑️  Delete all files in upload-directory":
         log.info("🗑️  Deleting files and folder...");
-        clearCopyFolder();
+        await clearCopyFolder();
         log.success("✅ Folder cleared successfully.");
         break;
       case "📋 Show changelog":

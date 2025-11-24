@@ -220,7 +220,7 @@ describe("Global Installation Tests", () => {
 
           // Prüfe dass eine Fehlermeldung ausgegeben wurde
           expect(mockLog).toHaveBeenCalledWith(
-            expect.stringContaining("❌ Changelog.json nicht gefunden!")
+            expect.stringContaining("❌ Changelog.json not found!")
           );
         } finally {
           console.log = originalLog;

@@ -1,6 +1,21 @@
 {
   "changelog": [
     {
+      "version": "1.5.1",
+      "date": "2025-11-24",
+      "type": "minor",
+      "changes": [
+        {
+          "type": "fix",
+          "description": "Fixed duplicate title display in changelog animation"
+        },
+        {
+          "type": "fix",
+          "description": "Fixed small issues"
+        }
+      ]
+    },
+    {
       "version": "1.5.0",
       "date": "2025-08-22",
       "type": "minor",

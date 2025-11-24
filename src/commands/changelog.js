@@ -46,10 +46,11 @@ function getVersionBadge(type) {
 }
 
 async function animateText(text, delay = ANIMATION_SPEED.CHANGE_TYPEWRITER) {
-  for (let i = 0; i <= text.length; i++) {
-    process.stdout.write("\r" + text.substring(0, i));
+  for (let i = 0; i < text.length; i++) {
+    process.stdout.write("\r" + text.substring(0, i + 1));
     await sleep(delay);
   }
+  process.stdout.write("\r" + text);
   console.log();
 }
 
@@ -140,9 +141,7 @@ async function showChangelog() {
 
     await sleep(ANIMATION_SPEED.FINAL_PAUSE);
   } catch (error) {
-    console.log(
-      chalk.red(`❌ Error loading changelog: ${error.message}`)
-    );
+    console.log(chalk.red(`❌ Error loading changelog: ${error.message}`));
   }
 }
 

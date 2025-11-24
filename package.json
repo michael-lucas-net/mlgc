@@ -1,6 +1,6 @@
 {
   "name": "mlgc",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "main": "./src/cli/index.js",
   "author": "Michael Lucas <info@michael-lucas.net> (http://www.michael-lucas.net)",
   "homepage": "https://github.com/michael-lucas-net/mlgc",
@@ -35,7 +35,7 @@
     "test:full-report": "jest --coverage --coverageReporters=html --verbose --reporters=default --reporters=jest-html-reporters",
     "test:watch": "jest --watch --verbose",
     "test:debug": "jest --verbose --no-cache --detectOpenHandles",
-    "start": "node src/cli/index.js",
+    "start": "NODE_OPTIONS='--no-deprecation' node src/cli/index.js",
     "lint": "eslint src/ test/",
     "lint:fix": "eslint src/ test/ --fix",
     "format": "prettier --write src/ test/ *.json *.md",

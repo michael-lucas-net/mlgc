@@ -4,7 +4,11 @@ const settings = require("../../config/settings");
 const path = require("path");
 
 async function clearCopyFolder() {
-  await clearFolder(`${path}/../${settings["upload-folder-name"]}`);
+  const uploadFolderPath = path.join(
+    process.cwd(),
+    settings["upload-folder-name"]
+  );
+  await clearFolder(uploadFolderPath);
 }
 
 async function clearFolder(path) {

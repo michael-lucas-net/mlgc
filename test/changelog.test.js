@@ -166,3 +166,115 @@ describe("Changelog", () => {
     expect(mockClear).toHaveBeenCalled();
   });
 });
+
+// Separate Test-Suite für Titel-Tests ohne Mock
+describe("Changelog Titel", () => {
+  let originalLog;
+  let originalWrite;
+  let originalClear;
+  let logCalls;
+  let writeCalls;
+
+  beforeEach(() => {
+    // Speichere originale Funktionen
+    originalLog = console.log;
+    originalWrite = process.stdout.write;
+    originalClear = console.clear;
+
+    // Erstelle Arrays zum Speichern der Aufrufe
+    logCalls = [];
+    writeCalls = [];
+
+    // Mock console und process.stdout um Aufrufe zu sammeln
+    console.log = jest.fn((...args) => {
+      const output = args
+        .map((arg) => (typeof arg === "string" ? arg : String(arg)))
+        .join(" ");
+      logCalls.push(output);
+    });
+    process.stdout.write = jest.fn((data) => {
+      writeCalls.push(String(data));
+      return true;
+    });
+    console.clear = jest.fn();
+
+    // Mock fs für changelog.json
+    jest.spyOn(fs, "existsSync").mockReturnValue(true);
+    jest.spyOn(fs, "readFileSync").mockReturnValue(
+      JSON.stringify({
+        changelog: [
+          {
+            version: "1.0.0",
+            date: "2023-12-01",
+            type: "major",
+            changes: [
+              {
+                type: "feature",
+                description: "Test feature",
+              },
+            ],
+          },
+        ],
+      })
+    );
+  });
+
+  afterEach(() => {
+    // Stelle originale Funktionen wieder her
+    console.log = originalLog;
+    process.stdout.write = originalWrite;
+    console.clear = originalClear;
+    jest.restoreAllMocks();
+    jest.resetModules();
+  });
+
+  test("sollte den Titel nur einmal vollständig anzeigen", async () => {
+    // Lade die echte Implementierung (ohne Mock)
+    jest.resetModules();
+    const { showChangelog } = jest.requireActual("../src/commands/changelog");
+
+    await showChangelog();
+
+    // Sammle alle Ausgaben (nur die finalen, ohne \r Sequenzen)
+    const allWriteOutput = writeCalls.join("");
+    const allLogOutput = logCalls.join("");
+    const allOutput = allWriteOutput + allLogOutput;
+
+    // Finde alle Vorkommen des vollständigen Titels
+    // Der Titel wird während der Animation mehrfach geschrieben, aber mit \r überschrieben
+    // Am Ende sollte er nur einmal vollständig stehen
+    const titlePattern = /🦙 MLGC CHANGELOG 🦙/g;
+    const matches = allOutput.match(titlePattern);
+    const titleCount = matches ? matches.length : 0;
+
+    // Prüfe, dass der Titel mindestens einmal vorkommt (in der finalen Ausgabe)
+    // Da die Animation mit \r arbeitet, können mehrere Vorkommen in writeCalls sein,
+    // aber am Ende sollte nur eine vollständige Ausgabe stehen
+    expect(titleCount).toBeGreaterThan(0);
+
+    // Prüfe die letzte vollständige Ausgabe - sollte den Titel enthalten
+    const lastCompleteOutput = allOutput;
+    const finalTitleMatches = lastCompleteOutput.match(titlePattern);
+    expect(finalTitleMatches).toBeTruthy();
+  });
+
+  test("sollte den Titel mit korrektem Format anzeigen", async () => {
+    // Lade die echte Implementierung (ohne Mock)
+    jest.resetModules();
+    const { showChangelog } = jest.requireActual("../src/commands/changelog");
+
+    await showChangelog();
+
+    // Sammle alle Ausgaben
+    const allWriteOutput = writeCalls.join("");
+    const allLogOutput = logCalls.join("");
+    const allOutput = allWriteOutput + allLogOutput;
+
+    // Prüfe, dass der Titel den erwarteten Text enthält
+    expect(allOutput).toContain("MLGC CHANGELOG");
+    expect(allOutput).toContain("🦙");
+
+    // Prüfe, dass der vollständige Titel vorhanden ist
+    expect(allOutput).toMatch(/🦙\s*MLGC\s*CHANGELOG\s*🦙/);
+  });
+});

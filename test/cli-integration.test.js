@@ -36,8 +36,8 @@ describe("CLI Integration Tests", () => {
           });
 
           child.on("exit", (code, signal) => {
-            // SIGINT should result in signal being set
-            if (signal === "SIGINT") {
+            // SIGINT should result in signal being set or exit code 130
+            if (signal === "SIGINT" || code === 130) {
               resolve({ stdout, stderr, code, signal });
             } else {
               reject(
@@ -90,7 +90,8 @@ describe("CLI Integration Tests", () => {
           });
 
           child.on("exit", (code, signal) => {
-            if (signal === "SIGINT") {
+            // SIGINT should result in signal being set or exit code 130
+            if (signal === "SIGINT" || code === 130) {
               resolve({ stdout, stderr, code, signal });
             } else {
               reject(new Error(`Unexpected exit: ${code}, ${signal}`));
