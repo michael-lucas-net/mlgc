@@ -7,67 +7,55 @@
       "changes": [
         {
           "type": "feature",
-          "description": "Progress bar with visual progress indicator when copying files"
+          "description": "Visual progress bar showing copy progress in real-time"
         },
         {
           "type": "feature",
-          "description": "Estimated time remaining (ETA) based on average time per file"
+          "description": "Estimated time remaining (ETA) during file copy operations"
         },
         {
           "type": "feature",
-          "description": "Display of elapsed time during copy operation"
+          "description": "See how long the copy operation has been running"
         },
         {
           "type": "feature",
-          "description": "Display of current filename during copying"
+          "description": "See which file is currently being copied"
         },
         {
           "type": "feature",
-          "description": "Interactive selective file copy with multi-select functionality"
+          "description": "Select individual files to copy instead of copying all files"
         },
         {
           "type": "feature",
-          "description": "File type filter for selective copy (e.g., .js, .ts, .jsx, .tsx)"
+          "description": "Filter files by type (e.g., only .js, .ts, .jsx, .tsx files)"
         },
         {
           "type": "feature",
-          "description": "Comparison mode selection (commit vs branch) for both copy options"
+          "description": "Choose between copying current changes or comparing with main branch"
         },
         {
           "type": "improvement",
-          "description": "Improved user experience through visual feedback during copying"
+          "description": "Better visual feedback so you always know what's happening"
         },
         {
           "type": "improvement",
-          "description": "Simplified menu structure - merged copy options with mode selection"
+          "description": "Simplified menu - choose your copy mode directly when copying"
         },
         {
           "type": "improvement",
-          "description": "Distinct icons for menu options (📄 current changes, ✨ interactive, 📜 changelog)"
+          "description": "Distinct icons for each menu option for easier navigation"
         },
         {
           "type": "improvement",
-          "description": "Full English translation of all UI elements, messages, and documentation"
+          "description": "All interface elements now in English"
         },
         {
           "type": "improvement",
-          "description": "Clear instructions for file selection (space to select, enter to confirm)"
+          "description": "Clear on-screen instructions for selecting files"
         },
         {
           "type": "improvement",
-          "description": "Jest configuration extended to ignore upload directory"
-        },
-        {
-          "type": "test",
-          "description": "35 comprehensive tests for progress bar including edge cases added"
-        },
-        {
-          "type": "test",
-          "description": "17 additional tests for selective copy functionality and file filtering"
-        },
-        {
-          "type": "chore",
-          "description": "cli-progress dependency added for progress bar functionality"
+          "description": "Version number displayed in welcome screen"
         }
       ]
     },

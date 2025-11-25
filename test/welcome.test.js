@@ -8,7 +8,11 @@ jest.mock("chalk", () => ({
   yellow: {
     bold: jest.fn((text) => text),
   },
+  gray: jest.fn((text) => text),
 }));
+
+// Store original require cache for package.json
+const originalPackageJson = require("../package.json");
 
 describe("showWelcome", () => {
   beforeEach(() => {
@@ -157,6 +161,82 @@ describe("showWelcome", () => {
       expect(message).not.toContain("undefined");
       expect(message).not.toContain("null");
       expect(message).toBeTruthy();
+    });
+  });
+
+  describe("version display", () => {
+    it("should display version from package.json", () => {
+      showWelcome();
+
+      const [message] = boxen.mock.calls[0];
+      const expectedVersion = originalPackageJson.version;
+
+      expect(message).toContain(`Version ${expectedVersion}`);
+    });
+
+    it("should use chalk.gray for version display", () => {
+      showWelcome();
+
+      const expectedVersion = originalPackageJson.version;
+      expect(chalk.gray).toHaveBeenCalledWith(`Version ${expectedVersion}`);
+    });
+
+    it("should read version directly from package.json", () => {
+      // Verify that the version comes from the actual package.json
+      const packageJson = require("../package.json");
+      showWelcome();
+
+      const [message] = boxen.mock.calls[0];
+      expect(message).toContain(`Version ${packageJson.version}`);
+    });
+
+    it("should automatically reflect current package.json version", () => {
+      // This test verifies that the version is read from package.json at runtime
+      // If package.json changes, this test will automatically use the new version
+      const currentVersion = require("../package.json").version;
+      showWelcome();
+
+      const [message] = boxen.mock.calls[0];
+      expect(message).toContain(`Version ${currentVersion}`);
+      
+      // Verify it matches the actual package.json version
+      expect(currentVersion).toBe(originalPackageJson.version);
+    });
+
+    it("should include version in the message structure", () => {
+      showWelcome();
+
+      const [message] = boxen.mock.calls[0];
+      const versionRegex = /Version \d+\.\d+\.\d+/;
+
+      expect(message).toMatch(versionRegex);
+    });
+
+    it("should display version between title and description", () => {
+      showWelcome();
+
+      const [message] = boxen.mock.calls[0];
+      const lines = message.split("\n").map((line) => line.trim());
+
+      const titleIndex = lines.findIndex((line) => line.includes("Welcome TO MLGC"));
+      const versionIndex = lines.findIndex((line) => line.startsWith("Version"));
+      const descriptionIndex = lines.findIndex((line) => line.includes("ML Git Changes"));
+
+      expect(titleIndex).toBeGreaterThan(-1);
+      expect(versionIndex).toBeGreaterThan(-1);
+      expect(descriptionIndex).toBeGreaterThan(-1);
+      expect(versionIndex).toBeGreaterThan(titleIndex);
+      expect(descriptionIndex).toBeGreaterThan(versionIndex);
+    });
+
+    it("should handle version format correctly", () => {
+      showWelcome();
+
+      const [message] = boxen.mock.calls[0];
+      const versionMatch = message.match(/Version ([\d.]+)/);
+
+      expect(versionMatch).not.toBeNull();
+      expect(versionMatch[1]).toMatch(/^\d+\.\d+\.\d+$/); // Format: x.y.z
     });
   });
 });
