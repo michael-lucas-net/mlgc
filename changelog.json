@@ -1,6 +1,77 @@
 {
   "changelog": [
     {
+      "version": "2.0.0",
+      "date": "2025-11-25",
+      "type": "major",
+      "changes": [
+        {
+          "type": "feature",
+          "description": "Progress bar with visual progress indicator when copying files"
+        },
+        {
+          "type": "feature",
+          "description": "Estimated time remaining (ETA) based on average time per file"
+        },
+        {
+          "type": "feature",
+          "description": "Display of elapsed time during copy operation"
+        },
+        {
+          "type": "feature",
+          "description": "Display of current filename during copying"
+        },
+        {
+          "type": "feature",
+          "description": "Interactive selective file copy with multi-select functionality"
+        },
+        {
+          "type": "feature",
+          "description": "File type filter for selective copy (e.g., .js, .ts, .jsx, .tsx)"
+        },
+        {
+          "type": "feature",
+          "description": "Comparison mode selection (commit vs branch) for both copy options"
+        },
+        {
+          "type": "improvement",
+          "description": "Improved user experience through visual feedback during copying"
+        },
+        {
+          "type": "improvement",
+          "description": "Simplified menu structure - merged copy options with mode selection"
+        },
+        {
+          "type": "improvement",
+          "description": "Distinct icons for menu options (📄 current changes, ✨ interactive, 📜 changelog)"
+        },
+        {
+          "type": "improvement",
+          "description": "Full English translation of all UI elements, messages, and documentation"
+        },
+        {
+          "type": "improvement",
+          "description": "Clear instructions for file selection (space to select, enter to confirm)"
+        },
+        {
+          "type": "improvement",
+          "description": "Jest configuration extended to ignore upload directory"
+        },
+        {
+          "type": "test",
+          "description": "35 comprehensive tests for progress bar including edge cases added"
+        },
+        {
+          "type": "test",
+          "description": "17 additional tests for selective copy functionality and file filtering"
+        },
+        {
+          "type": "chore",
+          "description": "cli-progress dependency added for progress bar functionality"
+        }
+      ]
+    },
+    {
       "version": "1.6.0",
       "date": "2025-11-24",
       "type": "minor",

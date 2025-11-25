@@ -58,7 +58,7 @@ describe("showWelcome", () => {
   it("should use chalk.yellow.bold for the welcome title", () => {
     showWelcome();
 
-    expect(chalk.yellow.bold).toHaveBeenCalledWith("🦙 Welcome TO MLGC🦙");
+    expect(chalk.yellow.bold).toHaveBeenCalledWith("🦙 Welcome TO MLGC 🦙");
   });
 
   it("should include emoji in the welcome message", () => {

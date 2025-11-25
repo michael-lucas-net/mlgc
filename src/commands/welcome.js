@@ -3,7 +3,7 @@ const chalk = require("chalk");
 
 function showWelcome() {
   const message = `
-  ${chalk.yellow.bold("🦙 Welcome TO MLGC🦙")}
+  ${chalk.yellow.bold("🦙 Welcome TO MLGC 🦙")}
 
   ML Git Changes
   This CLI will help you collect all your git changes in one folder.

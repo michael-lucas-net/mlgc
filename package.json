@@ -1,6 +1,6 @@
 {
   "name": "mlgc",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "main": "./src/cli/index.js",
   "author": "Michael Lucas <info@michael-lucas.net> (http://www.michael-lucas.net)",
   "homepage": "https://github.com/michael-lucas-net/mlgc",
@@ -45,6 +45,7 @@
   "dependencies": {
     "boxen": "^7.1.1",
     "chalk": "^4.1.2",
+    "cli-progress": "^3.12.0",
     "enquirer": "^2.4.1"
   },
   "devDependencies": {
@@ -73,6 +74,10 @@
     ],
     "testMatch": [
       "**/test/**/*.test.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/___CHANGES_TO_UPLOAD___/"
     ],
     "verbose": true,
     "bail": false,
