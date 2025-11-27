@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const boxen = require("boxen").default || require("boxen");
+const { loadBoxen } = require("../utils/boxenHelper");
 const fs = require("fs");
 const path = require("path");
 
@@ -82,6 +82,7 @@ async function showChangelog() {
       // Version header with animation
       const versionLine = `${getVersionBadge(entry.type)} ${chalk.bold.white(entry.version)} ${chalk.gray(`(${entry.date})`)}`;
 
+      const boxen = await loadBoxen();
       const versionBox = boxen(versionLine, {
         padding: { top: 0, bottom: 0, left: 1, right: 1 },
         borderStyle: "round",

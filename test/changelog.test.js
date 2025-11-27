@@ -1,6 +1,17 @@
 const fs = require("fs");
 const path = require("path");
 
+// Mock boxenHelper
+jest.mock("../src/utils/boxenHelper", () => ({
+  loadBoxen: jest.fn().mockResolvedValue((text, options) => {
+    // Simple mock implementation that returns formatted text
+    const lines = text.split("\n");
+    const maxWidth = Math.max(...lines.map((line) => line.length));
+    const border = "─".repeat(maxWidth + 4);
+    return `┌${border}┐\n│ ${text} │\n└${border}┘`;
+  }),
+}));
+
 // Mock console.log und andere console Methoden
 const mockLog = jest.fn();
 const mockClear = jest.fn();

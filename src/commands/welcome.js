@@ -1,8 +1,8 @@
-const boxen = require("boxen").default || require("boxen");
+const { loadBoxen } = require("../utils/boxenHelper");
 const chalk = require("chalk");
 const packageJson = require("../../package.json");
 
-function showWelcome() {
+async function showWelcome() {
   const version = packageJson.version;
   const message = `
   ${chalk.yellow.bold("🦙 Welcome TO MLGC 🦙")}
@@ -19,6 +19,7 @@ function showWelcome() {
     borderColor: "yellow",
   };
 
+  const boxen = await loadBoxen();
   console.log(boxen(message, boxOptions));
 }
 

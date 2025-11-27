@@ -3,7 +3,7 @@ const { clearCopyFolder } = require("../core/folder");
 const { log } = require("../utils/logger");
 const fileHelper = require("../helpers/fileHelper");
 const settings = require("../../config/settings");
-const boxen = require("boxen").default || require("boxen");
+const { loadBoxen } = require("../utils/boxenHelper");
 const { ProgressBar } = require("../utils/progressBar");
 const { Select, MultiSelect } = require("enquirer");
 const path = require("path");
@@ -57,6 +57,7 @@ async function copy(branchOrCommit, path) {
       const fileList = copiedFiles.map((file) => `- ${file}`).join("\n");
       const elapsedTime = progressBar.getElapsedTime();
 
+      const boxen = await loadBoxen();
       const boxContent = boxen(
         `Copied the following ${copiedFiles.length} file(s) in ${elapsedTime.toFixed(2)}s:\n\n${fileList}`,
         {
@@ -219,6 +220,7 @@ async function copySelective(branchOrCommit, path) {
           const fileList = copiedFiles.map((file) => `- ${file}`).join("\n");
           const elapsedTime = progressBar.getElapsedTime();
 
+          const boxen = await loadBoxen();
           const boxContent = boxen(
             `Copied the following ${copiedFiles.length} file(s) in ${elapsedTime.toFixed(2)}s:\n\n${fileList}`,
             {

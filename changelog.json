@@ -1,6 +1,25 @@
 {
   "changelog": [
     {
+      "version": "2.0.1",
+      "date": "2025-11-27",
+      "type": "patch",
+      "changes": [
+        {
+          "type": "fix",
+          "description": "Fixed error when using boxen in global installation"
+        },
+        {
+          "type": "fix",
+          "description": "Fixed Windows compatibility issue with NODE_OPTIONS in start script"
+        },
+        {
+          "type": "fix",
+          "description": "Fixed async function handling"
+        }
+      ]
+    },
+    {
       "version": "2.0.0",
       "date": "2025-11-25",
       "type": "major",

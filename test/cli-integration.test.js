@@ -2,6 +2,17 @@ const { spawn } = require("child_process");
 const path = require("path");
 const fs = require("fs").promises;
 
+// Mock boxenHelper to avoid ESM import issues in tests
+jest.mock("../src/utils/boxenHelper", () => ({
+  loadBoxen: jest.fn().mockResolvedValue((text, options) => {
+    // Simple mock implementation that returns formatted text
+    const lines = text.split("\n");
+    const maxWidth = Math.max(...lines.map((line) => line.length));
+    const border = "─".repeat(maxWidth + 4);
+    return `┌${border}┐\n│ ${text} │\n└${border}┘`;
+  }),
+}));
+
 describe("CLI Integration Tests", () => {
   const cliPath = path.join(__dirname, "../src/cli/index.js");
   const testTimeout = 10000; // 10 seconds
@@ -119,10 +130,13 @@ describe("CLI Integration Tests", () => {
   });
 
   describe("module loading", () => {
-    it("should load all required modules without errors", () => {
+    it("should load all required modules without errors", async () => {
       expect(() => {
         require("../src/cli/index.js");
       }).not.toThrow();
+      
+      // Wait a bit for async operations to complete
+      await new Promise((resolve) => setTimeout(resolve, 100));
     });
 
     it("should have all dependencies available", () => {
@@ -148,7 +162,7 @@ describe("CLI Integration Tests", () => {
 
     it("should have shebang for Unix systems", async () => {
       const content = await fs.readFile(cliPath, "utf8");
-      const firstLine = content.split("\n")[0];
+      const firstLine = content.split("\n")[0].replace(/\r$/, "");
 
       expect(firstLine).toBe("#!/usr/bin/env node");
     });

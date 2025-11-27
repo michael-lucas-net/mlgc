@@ -19,6 +19,16 @@ jest.mock("enquirer", () => ({
   MultiSelect: jest.fn(),
 }));
 
+jest.mock("../src/utils/boxenHelper", () => ({
+  loadBoxen: jest.fn().mockResolvedValue((text, options) => {
+    // Simple mock implementation that returns formatted text
+    const lines = text.split("\n");
+    const maxWidth = Math.max(...lines.map((line) => line.length));
+    const border = "─".repeat(maxWidth + 4);
+    return `┌${border}┐\n│ ${text} │\n└${border}┘`;
+  }),
+}));
+
 const { clearCopyFolder } = require("../src/core/folder");
 
 describe("copy function", () => {

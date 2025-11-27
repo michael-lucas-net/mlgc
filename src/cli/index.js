@@ -3,7 +3,7 @@ const { showMenu } = require("./menu");
 const { showWelcome } = require("../commands/welcome");
 
 async function main() {
-  showWelcome();
+  await showWelcome();
   await showMenu();
 }
 

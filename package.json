@@ -1,6 +1,6 @@
 {
   "name": "mlgc",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "./src/cli/index.js",
   "author": "Michael Lucas <info@michael-lucas.net> (http://www.michael-lucas.net)",
   "homepage": "https://github.com/michael-lucas-net/mlgc",
@@ -29,13 +29,14 @@
   ],
   "scripts": {
     "test": "jest",
+    "test:fail": "jest --onlyFailures",
     "test:coverage": "jest --coverage --verbose",
     "test:coverage:html": "jest --coverage --coverageReporters=html --verbose",
     "test:html": "jest --verbose --reporters=default --reporters=jest-html-reporters",
     "test:full-report": "jest --coverage --coverageReporters=html --verbose --reporters=default --reporters=jest-html-reporters",
     "test:watch": "jest --watch --verbose",
     "test:debug": "jest --verbose --no-cache --detectOpenHandles",
-    "start": "NODE_OPTIONS='--no-deprecation' node src/cli/index.js",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation node src/cli/index.js",
     "lint": "eslint src/ test/",
     "lint:fix": "eslint src/ test/ --fix",
     "format": "prettier --write src/ test/ *.json *.md",
@@ -49,6 +50,7 @@
     "enquirer": "^2.4.1"
   },
   "devDependencies": {
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jest": "^29.2.1",
