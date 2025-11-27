@@ -1,6 +1,25 @@
 {
   "changelog": [
     {
+      "version": "2.1.0",
+      "date": "2025-01-27",
+      "type": "minor",
+      "changes": [
+        {
+          "type": "feature",
+          "description": "CLI is now always interactive with all files pre-selected by default"
+        },
+        {
+          "type": "improvement",
+          "description": "Users can now deselect files instead of selecting them - all files are pre-selected"
+        },
+        {
+          "type": "improvement",
+          "description": "Simplified menu - removed non-interactive copy option"
+        }
+      ]
+    },
+    {
       "version": "2.0.1",
       "date": "2025-11-27",
       "type": "patch",

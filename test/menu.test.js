@@ -1,5 +1,5 @@
 const { showMenu } = require("../src/cli/menu");
-const { copy, copySelective } = require("../src/commands/copy");
+const { copySelective } = require("../src/commands/copy");
 const { clearCopyFolder } = require("../src/core/folder");
 const generatePath = require("../src/helpers/pathHelper");
 const { log } = require("../src/utils/logger");
@@ -39,6 +39,7 @@ describe("showMenu function", () => {
   it("should log info for copying current changes with commit mode", async () => {
     const mockPath = "/test/path";
     generatePath.mockReturnValue(mockPath);
+    copySelective.mockResolvedValue(undefined);
 
     // Simulate user selecting first option and then commit mode
     let callCount = 0;
@@ -55,13 +56,14 @@ describe("showMenu function", () => {
 
     await showMenu();
 
-    expect(copy).toHaveBeenCalledWith("commit", mockPath);
+    expect(copySelective).toHaveBeenCalledWith("commit", mockPath);
     expect(log.info).toHaveBeenCalledWith("📄 Copying changes (commit mode)...");
   });
 
   it("should log info for copying changes with branch mode", async () => {
     const mockPath = "/test/path";
     generatePath.mockReturnValue(mockPath);
+    copySelective.mockResolvedValue(undefined);
 
     // Simulate user selecting first option and then branch mode
     let callCount = 0;
@@ -78,12 +80,12 @@ describe("showMenu function", () => {
 
     await showMenu();
 
-    expect(copy).toHaveBeenCalledWith("branch", mockPath);
+    expect(copySelective).toHaveBeenCalledWith("branch", mockPath);
     expect(log.info).toHaveBeenCalledWith("📄 Copying changes (branch mode)...");
   });
 
   it("should clear copy folder and log success", async () => {
-    // Simulate user selecting third option
+    // Simulate user selecting second option
     Select.mockImplementation(() => ({
       run: jest
         .fn()
@@ -114,7 +116,7 @@ describe("showMenu function", () => {
     );
   });
 
-  it("should have exactly 4 menu choices", async () => {
+  it("should have exactly 3 menu choices", async () => {
     // Simulate user selecting first option
     Select.mockImplementation(() => ({
       run: jest
@@ -125,10 +127,9 @@ describe("showMenu function", () => {
     await showMenu();
 
     const menuChoices = Select.mock.calls[0][0].choices;
-    expect(menuChoices).toHaveLength(4);
+    expect(menuChoices).toHaveLength(3);
     expect(menuChoices).toEqual([
       "📄 Copy current changes to directory for upload",
-      "✨ Copy selected files interactively",
       "🗑️  Delete all files in upload-directory",
       "📜 Show changelog",
     ]);
@@ -151,9 +152,10 @@ describe("showMenu function", () => {
     );
   });
 
-  it("should pass the generated path to copy for current changes", async () => {
+  it("should pass the generated path to copySelective for current changes", async () => {
     const mockPath = "/specific/test/path";
     generatePath.mockReturnValue(mockPath);
+    copySelective.mockResolvedValue(undefined);
 
     // Simulate user selecting first option and then commit mode
     let callCount = 0;
@@ -170,12 +172,13 @@ describe("showMenu function", () => {
 
     await showMenu();
 
-    expect(copy).toHaveBeenCalledWith("commit", mockPath);
+    expect(copySelective).toHaveBeenCalledWith("commit", mockPath);
   });
 
-  it("should pass the generated path to copy for main branch changes", async () => {
+  it("should pass the generated path to copySelective for main branch changes", async () => {
     const mockPath = "/another/test/path";
     generatePath.mockReturnValue(mockPath);
+    copySelective.mockResolvedValue(undefined);
 
     // Simulate user selecting first option and then branch mode
     let callCount = 0;
@@ -192,62 +195,11 @@ describe("showMenu function", () => {
 
     await showMenu();
 
-    expect(copy).toHaveBeenCalledWith("branch", mockPath);
-  });
-
-  it("should call copySelective with commit mode when selected", async () => {
-    const mockPath = "/test/path";
-    generatePath.mockReturnValue(mockPath);
-    copySelective.mockResolvedValue(undefined);
-
-    // Simulate user selecting the selective copy option and then commit mode
-    let callCount = 0;
-    Select.mockImplementation(() => ({
-      run: jest.fn().mockImplementation(() => {
-        callCount++;
-        if (callCount === 1) {
-          return Promise.resolve("✨ Copy selected files interactively");
-        } else {
-          return Promise.resolve("commit");
-        }
-      }),
-    }));
-
-    await showMenu();
-
-    expect(copySelective).toHaveBeenCalledWith("commit", mockPath);
-    expect(log.info).toHaveBeenCalledWith(
-      "📋 Copying selected files (commit mode)..."
-    );
-  });
-
-  it("should call copySelective with branch mode when selected", async () => {
-    const mockPath = "/test/path";
-    generatePath.mockReturnValue(mockPath);
-    copySelective.mockResolvedValue(undefined);
-
-    // Simulate user selecting the selective copy option and then branch mode
-    let callCount = 0;
-    Select.mockImplementation(() => ({
-      run: jest.fn().mockImplementation(() => {
-        callCount++;
-        if (callCount === 1) {
-          return Promise.resolve("✨ Copy selected files interactively");
-        } else {
-          return Promise.resolve("branch");
-        }
-      }),
-    }));
-
-    await showMenu();
-
     expect(copySelective).toHaveBeenCalledWith("branch", mockPath);
-    expect(log.info).toHaveBeenCalledWith(
-      "📋 Copying selected files (branch mode)..."
-    );
   });
 
-  it("should not call copy or clearCopyFolder for unrecognized selection", async () => {
+
+  it("should not call copySelective or clearCopyFolder for unrecognized selection", async () => {
     // Simulate an unrecognized selection
     Select.mockImplementation(() => ({
       run: jest.fn().mockResolvedValue("Unknown option"),
@@ -255,7 +207,7 @@ describe("showMenu function", () => {
 
     await showMenu();
 
-    expect(copy).not.toHaveBeenCalled();
+    expect(copySelective).not.toHaveBeenCalled();
     expect(clearCopyFolder).not.toHaveBeenCalled();
   });
 
@@ -331,20 +283,25 @@ describe("showMenu function", () => {
       consoleErrorSpy.mockRestore();
     });
 
-    it("should not crash on copy function errors", async () => {
+    it("should not crash on copySelective function errors", async () => {
       const copyError = new Error("Copy operation failed");
-      copy.mockImplementation(() => {
-        throw copyError;
-      });
+      copySelective.mockRejectedValue(copyError);
 
+      let callCount = 0;
       Select.mockImplementation(() => ({
-        run: jest
-          .fn()
-          .mockResolvedValue("📄 Copy current changes to directory for upload"),
+        run: jest.fn().mockImplementation(() => {
+          callCount++;
+          if (callCount === 1) {
+            return Promise.resolve("📄 Copy current changes to directory for upload");
+          } else {
+            return Promise.resolve("commit");
+          }
+        }),
       }));
 
-      // This should not throw as the error is in the copy function
-      expect(() => showMenu()).not.toThrow();
+      // This should not throw as the error is in the copySelective function
+      await showMenu();
+      expect(copySelective).toHaveBeenCalled();
     });
 
     it("should not crash on clearCopyFolder errors", async () => {
@@ -422,41 +379,69 @@ describe("showMenu function", () => {
 
   describe("async behavior", () => {
     it("should wait for Select promise to resolve before proceeding", async () => {
+      copySelective.mockResolvedValue(undefined);
       let selectResolve;
+      let modeResolve;
+      let callCount = 0;
       const selectPromise = new Promise((resolve) => {
         selectResolve = resolve;
       });
+      const modePromise = new Promise((resolve) => {
+        modeResolve = resolve;
+      });
 
       Select.mockImplementation(() => ({
-        run: jest.fn().mockReturnValue(selectPromise),
+        run: jest.fn().mockImplementation(() => {
+          callCount++;
+          if (callCount === 1) {
+            return selectPromise;
+          } else {
+            return modePromise;
+          }
+        }),
       }));
 
       const menuPromise = showMenu();
 
-      // copy should not be called yet
-      expect(copy).not.toHaveBeenCalled();
+      // copySelective should not be called yet
+      expect(copySelective).not.toHaveBeenCalled();
 
       // Resolve the select promise
       selectResolve("📄 Copy current changes to directory for upload");
+      modeResolve("commit");
       await menuPromise;
 
-      // Now copy should be called
-      expect(copy).toHaveBeenCalled();
+      // Now copySelective should be called
+      expect(copySelective).toHaveBeenCalled();
     });
 
     it("should handle concurrent menu calls", async () => {
-      Select.mockImplementation(() => ({
-        run: jest
-          .fn()
-          .mockResolvedValue("📄 Copy current changes to directory for upload"),
-      }));
+      copySelective.mockResolvedValue(undefined);
+      const selectCalls = [];
+      
+      Select.mockImplementation((config) => {
+        const isMenuPrompt = config.name === "menu";
+        const runMock = jest.fn().mockImplementation(() => {
+          selectCalls.push(isMenuPrompt ? "menu" : "mode");
+          if (isMenuPrompt) {
+            return Promise.resolve("📄 Copy current changes to directory for upload");
+          } else {
+            return Promise.resolve("commit");
+          }
+        });
+        return { run: runMock };
+      });
 
       const promise1 = showMenu();
       const promise2 = showMenu();
 
       await Promise.all([promise1, promise2]);
 
-      expect(copy).toHaveBeenCalledTimes(2);
+      // Wait a bit to ensure all async operations complete
+      await new Promise((resolve) => setImmediate(resolve));
+
+      // Both menu calls should complete, resulting in 2 copySelective calls
+      expect(copySelective).toHaveBeenCalledTimes(2);
     });
   });
 });

@@ -8,76 +8,6 @@ const { ProgressBar } = require("../utils/progressBar");
 const { Select, MultiSelect } = require("enquirer");
 const path = require("path");
 
-async function copy(branchOrCommit, path) {
-  await clearCopyFolder();
-  const { exec } = require("child_process");
-
-  process.chdir(path);
-  const command = gitCommand(branchOrCommit);
-
-  exec(command, async (error, stdout) => {
-    if (error) {
-      log.warn("No changes found.");
-      return;
-    }
-
-    const files = stdout.split("\n").filter((file) => file !== "");
-
-    if (files.length === 0) {
-      log.info("No changes found.");
-      return;
-    }
-
-    // Initialize Progress Bar
-    const progressBar = new ProgressBar(files.length);
-    const copiedFiles = [];
-    const failedFiles = [];
-
-    for (const file of files) {
-      try {
-        await fileHelper.copyFile(
-          file,
-          `${settings["upload-folder-name"]}/${file}`
-        );
-        copiedFiles.push(file);
-        progressBar.increment(file);
-      } catch (err) {
-        // Error handling: log warning
-        failedFiles.push({ file, error: err.message });
-        log.warn(`Failed to copy file: ${err.message}`);
-        progressBar.increment(file);
-      }
-    }
-
-    // Progress Bar stoppen
-    progressBar.stop();
-
-    // Ergebnis anzeigen
-    if (copiedFiles.length > 0) {
-      const fileList = copiedFiles.map((file) => `- ${file}`).join("\n");
-      const elapsedTime = progressBar.getElapsedTime();
-
-      const boxen = await loadBoxen();
-      const boxContent = boxen(
-        `Copied the following ${copiedFiles.length} file(s) in ${elapsedTime.toFixed(2)}s:\n\n${fileList}`,
-        {
-          padding: 1,
-          margin: 1,
-          borderStyle: "round",
-          borderColor: "cyan",
-        }
-      );
-
-      console.log(boxContent);
-      log.success(`Copied ${copiedFiles.length} file(s) in ${elapsedTime.toFixed(2)}s.`);
-    }
-
-    if (failedFiles.length > 0) {
-      log.warn(`${failedFiles.length} file(s) failed to copy.`);
-    }
-  });
-}
-
 /**
  * Filters files by file type
  * @param {string[]} files - Array of file paths
@@ -178,11 +108,12 @@ async function copySelective(branchOrCommit, path) {
 
         const filePrompt = new MultiSelect({
           name: "files",
-          message: `📄 Select files to copy (${filteredFiles.length} available):`,
+          message: `📄 Select files to copy (${filteredFiles.length} available, all pre-selected):`,
           choices: fileChoices,
+          initial: filteredFiles,
           limit: Math.min(filteredFiles.length, 10),
-          hint: "Press <space> to select/deselect files, <enter> to confirm selection",
-          instructions: "Press <space> to select, <enter> to confirm",
+          hint: "Press <space> to deselect files, <enter> to confirm selection",
+          instructions: "Press <space> to deselect, <enter> to confirm",
         });
 
         const selectedFiles = await filePrompt.run();
@@ -252,4 +183,4 @@ async function copySelective(branchOrCommit, path) {
   });
 }
 
-module.exports = { copy, copySelective, filterFilesByType };
+module.exports = { copySelective, filterFilesByType };

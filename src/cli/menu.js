@@ -1,5 +1,5 @@
 const { Select } = require("enquirer");
-const { copy, copySelective } = require("../commands/copy");
+const { copySelective } = require("../commands/copy");
 const { clearCopyFolder } = require("../core/folder");
 const { showChangelog } = require("../commands/changelog");
 const generatePath = require("../helpers/pathHelper");
@@ -14,7 +14,6 @@ async function showMenu() {
       message: "🦙 What can I do for you?",
       choices: [
         "📄 Copy current changes to directory for upload",
-        "✨ Copy selected files interactively",
         "🗑️  Delete all files in upload-directory",
         "📜 Show changelog",
       ],
@@ -34,20 +33,6 @@ async function showMenu() {
         });
         const mode = await modePrompt.run();
         log.info(`📄 Copying changes (${mode === "commit" ? "commit" : "branch"} mode)...`);
-        copy(mode, path);
-        break;
-      }
-      case "✨ Copy selected files interactively": {
-        const modePrompt = new Select({
-          name: "mode",
-          message: "Select comparison mode:",
-          choices: [
-            { name: "commit", message: "📄 Current changes (commit)", value: "commit" },
-            { name: "branch", message: "🌿 Changes compared to main branch", value: "branch" },
-          ],
-        });
-        const mode = await modePrompt.run();
-        log.info(`📋 Copying selected files (${mode === "commit" ? "commit" : "branch"} mode)...`);
         await copySelective(mode, path);
         break;
       }
